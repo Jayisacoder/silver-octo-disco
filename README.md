@@ -27,14 +27,26 @@ Define your intended user, problem, constraints, and 3–5 measurable acceptance
 
 The starter does not provide agent definitions or Skills. Create them in `.claude/agents/` and `.claude/skills/` as part of your project. Choose and justify how agents communicate, what they may do, and when they must return control to the learner.
 
-## Getting started
+## Steps to the goal
 
-1. Read the [Epic](docs/EPIC.md), [Features](docs/FEATURES.md), and [User Stories](docs/STORIES.md).
-2. Use the [Tasks](docs/TASKS.md) to track your work.
-3. Write your project instructions and design your architecture. Explain your decisions before asking an agent to implement them.
-4. Choose an application framework and replace the placeholder commands in `package.json` with real test and build commands. Until then, both commands intentionally fail.
-5. Create and demonstrate your Skills and agents, implement your application, and collect evidence against your acceptance criteria.
-6. Obtain human approval before implementation and before production deployment. Verify the deployed application and record the results.
+Follow these milestones in order. Use the detailed [task checklist](docs/TASKS.md) as your progress tracker.
+
+| Step | Action | Evidence before moving on |
+|---|---|---|
+| 1. Set up | Fork this repository, clone your fork, and create your submission branch. | Your fork URL and branch; see [submission instructions](docs/SUBMISSION.md). |
+| 2. Define | Read Project 3 and write the feature, intended user, constraints, and 3–5 measurable acceptance criteria. | Your project definition in `CLAUDE.md`. |
+| 3. Design | Plan your agent responsibilities, delegation, Skill, approval gates, and architecture. Reserve your unique naming prefix. | Your design in `CLAUDE.md`, including a role-to-agent-name table and architecture diagram. |
+| 4. Approve | Present your implementation plan and review its scope and risks. | Dated learner approval in `evidence/validation.md` before implementation. |
+| 5. Build | Author your agents and Skill, implement your feature, and configure real test/build commands. | Working application, five required agent roles, one reusable Skill, and two recorded delegation examples. |
+| 6. Validate | Run tests and a production build; check every acceptance criterion and review your changes. Fix failures. | Commands, actual results, and delegation examples in `evidence/validation.md`. |
+| 7. Deploy | Verify a preview, review evidence, approve production, deploy, and check the live feature. | Approval, production URL, and verification in `evidence/deployment.md`. |
+| 8. Submit | Complete the Definition of Done, push to your fork, and open a PR to the instructor repository. | A review-ready PR with completed checklist and evidence links; prepare your 10–12 minute demo. |
+
+The placeholder test and build commands intentionally fail until you replace them with real project checks. Keep your designs learner-authored; the starter supplies requirements, not implementations.
+
+## Unique agent and Skill names
+
+Follow the [naming rules and fork/PR submission guide](docs/SUBMISSION.md). Every agent filename and its `name` field must use your learner prefix, such as `<learner-id>-lead`; use that same identifier in delegation references. Prefix your Skill names and directories too.
 
 Use [src/](src/README.md) and [tests/](tests/README.md), or adapt the structure to your chosen framework. Document required environment variable names in `.env.example`; never commit secret values.
 

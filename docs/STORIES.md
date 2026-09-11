@@ -189,3 +189,19 @@ The learner can explain:
 - what the DevOps Agent performed
 - how secrets are protected
 - how production success was verified
+
+---
+
+## Feature 8 — GitHub Submission
+
+### Story 8.1
+
+As a learner, I want to submit my work through a fork and pull request so that my instructor can review my implementation and evidence.
+
+**Acceptance Criteria**
+
+- work starts from starter `main` in the learner's own fork and submission branch
+- agent filenames and identifiers use a unique learner prefix, with matching Skill naming
+- a ready-for-review PR targets instructor `main` and links the required evidence
+- feedback is addressed on the same submission branch
+- learner solutions are not merged into starter `main`

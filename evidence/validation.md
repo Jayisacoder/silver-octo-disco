@@ -8,6 +8,21 @@ Date:
 
 Learner:
 
+## Implementation Plan and Human Approval
+
+Plan and affected files:
+
+Risks:
+
+Learner approval record and date (complete before implementation):
+
+## Delegation Examples
+
+| Named agent | Delegated task | Result / evidence | Why delegate? |
+|---|---|---|---|
+| | | | |
+| | | | |
+
 ## Acceptance Criteria
 
 | # | Criterion | Result | Evidence |

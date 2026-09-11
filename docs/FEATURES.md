@@ -120,3 +120,17 @@ A live demonstration covering:
 8. Vercel deployment
 9. production verification
 10. oral defense
+
+---
+
+## Feature 8 — GitHub Submission
+
+The learner works in a personal fork and submits a ready-for-review pull request to instructor `main`, following the [submission guide](SUBMISSION.md). Agent and Skill identifiers use a unique learner prefix.
+
+### Evidence
+
+- fork and submission branch
+- unique role-to-agent-name mapping
+- PR URL with completed checklist and evidence links
+
+Submission PRs are reviewed without merging solutions into starter `main`.

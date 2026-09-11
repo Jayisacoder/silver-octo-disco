@@ -1,0 +1,86 @@
+# Fork, Build, and Submit
+
+[README](../README.md) | [Task checklist](TASKS.md) | [Definition of Done](DEFINITION-OF-DONE.md)
+
+## 1. Fork and create your branch
+
+1. Open [the instructor repository](https://github.com/LaunchPadPhilly/claude-code-agent-project) and choose **Fork** under your own GitHub account. Copy only `main` if offered.
+2. Clone your fork. Replace `YOUR-GITHUB-USERNAME` below with your actual username.
+
+```bash
+git clone https://github.com/YOUR-GITHUB-USERNAME/claude-code-agent-project.git
+cd claude-code-agent-project
+git remote add upstream https://github.com/LaunchPadPhilly/claude-code-agent-project.git
+git switch main
+git switch -c submission/YOUR-GITHUB-USERNAME-project-3
+```
+
+`origin` is your fork; `upstream` is the instructor repository. Build from starter `main`. Do not copy or merge the reference `solution` branch into your submission.
+
+## 2. Give your agents unique names
+
+Use a consistent learner ID derived from your GitHub username: lowercase letters and hyphens only, spelling any digits as words (for example, `sam7` becomes `sam-seven`). Record both your GitHub username and learner ID in `CLAUDE.md`. Check existing class PRs for that prefix; if another learner uses it, append your first and last name in lowercase with hyphens.
+
+Use `<learner-id>-<role>` for every agent's filename stem and its frontmatter `name` value. These must match. Replace the placeholders; do not use literal angle brackets or the sample prefix.
+
+| Required role | File you create | Agent `name` |
+|---|---|---|
+| Lead | `.claude/agents/<learner-id>-lead.md` | `<learner-id>-lead` |
+| Research | `.claude/agents/<learner-id>-research.md` | `<learner-id>-research` |
+| Developer | `.claude/agents/<learner-id>-developer.md` | `<learner-id>-developer` |
+| Test | `.claude/agents/<learner-id>-test.md` | `<learner-id>-test` |
+| DevOps | `.claude/agents/<learner-id>-devops.md` | `<learner-id>-devops` |
+
+Prefix any additional agents too. Use the exact agent names in your instructions, delegation references, design diagram, and evidence. Role labels such as “Lead Agent” explain responsibility; they do not replace unique identifiers.
+
+Create Skills under `.claude/skills/<learner-id>-<skill-purpose>/SKILL.md` and use that same prefixed identifier for the Skill name. Write your own instructions and procedures; these naming examples are not agent or Skill solutions.
+
+Unique names avoid agent-file and identifier collisions. They do not eliminate conflicts in shared files such as `CLAUDE.md`, `README.md`, or application code. Work in your own fork and branch; do not overwrite another learner's work to resolve a conflict. Ask the instructor if an upstream update conflicts with your work.
+
+## 3. Build and collect evidence
+
+Follow the [README milestones](../README.md#steps-to-the-goal) and [task checklist](TASKS.md). Record your design and role-to-name mapping in `CLAUDE.md`.
+
+Add your implementation plan and dated learner approval to `evidence/validation.md` before implementation. Record at least two delegation examples there, identifying the agent, delegated task, result, and why delegation was appropriate. Fill in actual validation results and deployment evidence; unchecked or blank evidence is not completion.
+
+## 4. Push and open your submission PR
+
+Review `git status` and `git diff`; confirm no secrets or generated dependencies are included. Then commit and push your work (replace the username placeholder):
+
+```bash
+git add .
+git commit -m "Complete AI Software Development Team project"
+git push -u origin submission/YOUR-GITHUB-USERNAME-project-3
+```
+
+On GitHub, open a pull request and use **compare across forks** if needed:
+
+- **Base repository:** `LaunchPadPhilly/claude-code-agent-project`
+- **Base branch:** `main`
+- **Head repository:** your fork
+- **Compare branch:** `submission/YOUR-GITHUB-USERNAME-project-3`
+- **Title:** `Project 3 submission — YOUR-GITHUB-USERNAME`
+
+Complete the PR template with your own evidence. Link files from your submission branch, so the reviewer sees your completed work. If you opened a draft early, mark it ready for review when the checklist is complete. Your submission artifact is this PR URL, not only a fork URL or deployment URL.
+
+Respond to instructor feedback by committing and pushing to the same branch; the PR updates automatically. Re-run relevant validation and refresh evidence after changes. Keep your fork, branch, and live deployment available through assessment.
+
+## Submission checklist
+
+- [ ] My work is in my own fork on a branch created from starter `main`.
+- [ ] My `CLAUDE.md` includes the feature, acceptance criteria, architecture, and unique agent-name mapping.
+- [ ] All five required agent roles and at least one Skill are learner-authored and use my unique prefix.
+- [ ] I recorded implementation approval and at least two delegation examples.
+- [ ] Real tests and the production build pass; results are in `evidence/validation.md`.
+- [ ] Production approval, the live URL, and verification are in `evidence/deployment.md`.
+- [ ] I completed the [Definition of Done](DEFINITION-OF-DONE.md) and prepared my demo.
+- [ ] My PR targets instructor `main` from my fork's submission branch, contains evidence links, and is ready for review.
+
+## Instructor review policy
+
+Learner submission PRs are for assessment and feedback. Do not merge learner solutions into starter `main`. Review the fork branch and record feedback in the PR; close the PR after assessment without merging. The existing `solution` branch remains the separate instructor reference.
+
+## Reference documentation
+
+- [GitHub: creating a pull request from a fork](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request-from-a-fork)
+- [Claude Code: custom subagents](https://code.claude.com/docs/en/sub-agents)

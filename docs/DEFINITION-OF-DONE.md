@@ -27,6 +27,7 @@ The project is Done only when all required evidence exists.
 - [ ] Test Agent exists.
 - [ ] DevOps Agent exists.
 - [ ] Agent responsibilities are bounded.
+- [ ] Agent filenames and `name` values match and use my unique learner prefix; Skill names and directories use it too.
 - [ ] At least two delegated work examples can be shown.
 
 ## Validation
@@ -57,3 +58,9 @@ The project is Done only when all required evidence exists.
 - [ ] Learner explains architecture.
 - [ ] Learner explains delegation decisions.
 - [ ] Learner answers oral-defense questions.
+
+## Submission
+
+- [ ] Work is committed and pushed to my own GitHub fork on a submission branch from starter `main`.
+- [ ] A ready-for-review PR targets instructor `main` and includes the completed [submission checklist](SUBMISSION.md#submission-checklist) and evidence links.
+- [ ] The PR URL is my submission artifact; the PR remains unmerged for assessment.

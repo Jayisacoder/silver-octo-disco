@@ -13,6 +13,12 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 - How is the application installed and run locally?
 - What commands run real automated tests and a production build?
 
+## Learner identity and naming
+
+- What are your GitHub username and unique learner ID from the [submission guide](docs/SUBMISSION.md)?
+- What prefixed filename and matching agent `name` will you use for each required role? Add a role-to-name table.
+- How does your architecture connect these agents? Add your own diagram.
+
 ## Agent responsibilities and delegation
 
 - What responsibilities, context, and allowed actions will each required agent have?

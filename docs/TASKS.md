@@ -2,7 +2,13 @@
 
 [Back to Epic](EPIC.md) | [Features](FEATURES.md) | [Stories](STORIES.md)
 
-Use the checkboxes as the learner's project tracker.
+Use the checkboxes as the learner's project tracker. Follow the [README milestones](../README.md#steps-to-the-goal) in order; the feature groups below organize requirements, not permission to skip approval gates.
+
+## Setup — Fork and name your work
+
+- [ ] Follow the [submission guide](SUBMISSION.md) to fork, clone, and create your submission branch from `main`.
+- [ ] Choose your unique learner ID and record it with your GitHub username in `CLAUDE.md`.
+- [ ] Plan your prefixed agent and Skill names; record the role-to-name mapping and architecture in `CLAUDE.md`.
 
 ## Feature 1 — Project Definition
 
@@ -43,7 +49,7 @@ Use the checkboxes as the learner's project tracker.
 
 - [ ] Identify a workflow that benefits from a reusable Skill.
 - [ ] Design the Skills needed by the project.
-- [ ] Create at least one `SKILL.md` in `.claude/skills/`.
+- [ ] Create at least one `.claude/skills/<learner-id>-<skill-purpose>/SKILL.md` with a matching prefixed Skill name.
 - [ ] Define the Skill trigger/purpose.
 - [ ] Define the procedure.
 - [ ] Define completion evidence.
@@ -62,7 +68,8 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 4.1 — Lead Agent
 
-- [ ] Create your own `lead-agent.md` in `.claude/agents/`.
+- [ ] Create your own `<learner-id>-lead.md` in `.claude/agents/`.
+- [ ] Give every agent a `name` matching its prefixed filename stem and use it in all delegation references.
 - [ ] Define its responsibilities and justify its boundaries.
 - [ ] Define when it should delegate.
 - [ ] Define when it should work directly.
@@ -70,7 +77,7 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 4.2 — Research Agent
 
-- [ ] Create your own `research-agent.md` in `.claude/agents/`.
+- [ ] Create your own `<learner-id>-research.md` in `.claude/agents/`.
 - [ ] Confirm it has a read/investigation role.
 - [ ] Ask it to identify relevant code for one feature.
 - [ ] Review its findings.
@@ -78,7 +85,7 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 4.3 — Developer Agent
 
-- [ ] Create your own `developer-agent.md` in `.claude/agents/`.
+- [ ] Create your own `<learner-id>-developer.md` in `.claude/agents/`.
 - [ ] Generate an implementation plan.
 - [ ] Review affected files.
 - [ ] Review risks.
@@ -88,7 +95,7 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 4.4 — Test Agent
 
-- [ ] Create your own `test-agent.md` in `.claude/agents/`.
+- [ ] Create your own `<learner-id>-test.md` in `.claude/agents/`.
 - [ ] Run automated tests.
 - [ ] Run the production build.
 - [ ] Review acceptance criteria one by one.
@@ -98,7 +105,7 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 4.5 — DevOps Agent
 
-- [ ] Create your own `devops-agent.md` in `.claude/agents/`.
+- [ ] Create your own `<learner-id>-devops.md` in `.claude/agents/`.
 - [ ] Confirm Vercel CLI is available or choose Git integration.
 - [ ] Identify deployment target.
 - [ ] Review required environment variables.
@@ -120,7 +127,7 @@ Use the checkboxes as the learner's project tracker.
 - [ ] Read the plan.
 - [ ] Ask at least one question about the plan.
 - [ ] Approve or reject the plan.
-- [ ] Record approval before implementation starts.
+- [ ] Record the implementation plan and dated learner approval in `evidence/validation.md` before implementation starts.
 
 Suggested learner command:
 
@@ -181,10 +188,18 @@ Choose and document your deployment method, including how it enforces the produc
 - [ ] Show `CLAUDE.md`.
 - [ ] Show one Skill.
 - [ ] Draw or explain the agent architecture.
-- [ ] Demonstrate delegation to a subagent.
+- [ ] Demonstrate at least two delegation examples and record the named agent, task, result, and rationale in `evidence/validation.md`.
 - [ ] Show implementation evidence.
 - [ ] Show testing evidence.
 - [ ] Explain the production approval gate.
 - [ ] Show the live Vercel project.
 - [ ] Explain how production was verified.
 - [ ] Answer oral-defense questions without relying entirely on Claude.
+
+## Submission — GitHub Pull Request
+
+- [ ] Complete the [submission checklist](SUBMISSION.md#submission-checklist).
+- [ ] Push your completed work to your fork's submission branch.
+- [ ] Open a PR to instructor `main`, complete its evidence template, and mark it ready for review.
+- [ ] Use the PR URL as your submission and respond to instructor feedback on the same branch.
+- [ ] Keep the submission PR unmerged so instructor `main` remains starter-only.
