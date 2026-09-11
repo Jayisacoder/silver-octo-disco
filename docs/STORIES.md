@@ -6,11 +6,11 @@
 
 ### Story 1.1
 
-As a learner, I want to choose a project problem so that I have a clear outcome to build toward.
+As a learner, I want to define an application feature for my AI Software Development Team so that I have a clear outcome to build toward.
 
 **Acceptance Criteria**
 
-- one project option is selected
+- the application feature for the AI Software Development Team is defined
 - the problem is written in the learner's own words
 - the intended user is identified
 

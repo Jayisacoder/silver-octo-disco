@@ -8,8 +8,8 @@ Use the checkboxes as the learner's project tracker.
 
 ### Story 1.1 Tasks
 
-- [ ] Review all three project options.
-- [ ] Select one project.
+- [ ] Read [Project 3 — AI Software Development Team](project-ideas/03-software-development-team.md).
+- [ ] Define the application feature your agent team will build.
 - [ ] Write the project problem in your own words.
 - [ ] Identify the intended user.
 - [ ] Identify what a successful solution should do.

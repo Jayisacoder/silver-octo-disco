@@ -9,11 +9,9 @@ Design, build, test, and explain your own Claude Code agent workflow, then deplo
 
 Start your work from `main`. The branches have independent histories so the starter history contains no supplied solutions.
 
-## Choose a project
+## Your project
 
-- [AI Code Review Assistant](docs/project-ideas/01-code-review-assistant.md)
-- [AI Help Desk Agent](docs/project-ideas/02-help-desk-agent.md)
-- [AI Software Development Team](docs/project-ideas/03-software-development-team.md)
+Complete [Project 3 — AI Software Development Team](docs/project-ideas/03-software-development-team.md). Build your own agent team to research, implement, test, and deploy an application feature.
 
 Define your intended user, problem, constraints, and 3–5 measurable acceptance criteria before implementation.
 

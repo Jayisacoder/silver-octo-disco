@@ -4,7 +4,7 @@ The project is Done only when all required evidence exists.
 
 ## Product
 
-- [ ] The selected project solves its stated problem.
+- [ ] The AI Software Development Team project solves its stated problem.
 - [ ] Acceptance criteria are satisfied.
 - [ ] The application runs locally.
 - [ ] The production application is accessible.

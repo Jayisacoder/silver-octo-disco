@@ -1,6 +1,6 @@
 # Learner-authored Project Instructions
 
-This file is an unfinished design worksheet. Complete it for your selected project before using it as project instructions.
+This file is an unfinished design worksheet. Complete it for your AI Software Development Team project before using it as project instructions.
 
 ## Purpose and acceptance criteria
 

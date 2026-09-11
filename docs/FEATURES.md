@@ -4,11 +4,11 @@
 
 ## Feature 1 — Project Definition and Success Criteria
 
-The learner selects one of the three project options and translates the problem into observable acceptance criteria.
+The learner defines the application feature their AI Software Development Team will build and translates the problem into observable acceptance criteria.
 
 ### Evidence
 
-- selected project
+- application feature
 - problem statement
 - goals
 - acceptance criteria
