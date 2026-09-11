@@ -25,6 +25,8 @@ Verify that `upstream` points to `LaunchPadPhilly/claude-code-agent-project` and
 
 Build from starter `main` and author your own project.
 
+Before your first project commit, run `npm run hooks:install`, then verify `git config --get core.hooksPath` prints `.githooks`. Node.js/npm and Python 3 are required. Install the hook in every clone; Git does not automatically activate hooks from a clone. See [Testing and commit requirements](TESTING.md).
+
 ## 2. Give your agents unique names
 
 Use a consistent learner ID derived from your GitHub username: lowercase letters and hyphens only, spelling any digits as words (for example, `sam7` becomes `sam-seven`). Record both your GitHub username and learner ID in `CLAUDE.md`. Check existing class PRs for that prefix; if another learner uses it, append your first and last name in lowercase with hyphens.
@@ -36,6 +38,7 @@ Use `<learner-id>-<role>` for every agent's filename stem and its frontmatter `n
 | Lead | `.claude/agents/<learner-id>-lead.md` | `<learner-id>-lead` |
 | Research | `.claude/agents/<learner-id>-research.md` | `<learner-id>-research` |
 | Developer | `.claude/agents/<learner-id>-developer.md` | `<learner-id>-developer` |
+| Unit Testing | `.claude/agents/<learner-id>-unit-testing.md` | `<learner-id>-unit-testing` |
 | Test | `.claude/agents/<learner-id>-test.md` | `<learner-id>-test` |
 | DevOps | `.claude/agents/<learner-id>-devops.md` | `<learner-id>-devops` |
 
@@ -61,6 +64,8 @@ GitHub allows a PR to open before checks run. An open PR with missing evidence i
 
 ## 4. Push and open your submission PR
 
+All testing must pass before code commits. The Unit Testing Agent authors and runs unit tests; the Test Agent verifies the full suite and production build. Configure `test:unit`, `test`, and `build` as described in [Testing and commit requirements](TESTING.md).
+
 Review `git status` and `git diff`; confirm no secrets or generated dependencies are included. Then commit and push your work (replace the username placeholder):
 
 ```bash
@@ -68,6 +73,8 @@ git add .
 git commit -m "Complete AI Software Development Team project"
 git push -u origin submission/YOUR-GITHUB-USERNAME-project-3
 ```
+
+The installed hook automatically runs `npm run test:all` followed by `npm run build`. A failure blocks the commit. Stage all intended files; the gate rejects unstaged edits, untracked files, and test/build changes to the files being committed. Fix failures and retry; do not bypass validation.
 
 On GitHub, open a pull request and use **compare across forks** if needed:
 
@@ -86,9 +93,10 @@ Respond to instructor feedback by committing and pushing to the same branch; the
 - [ ] My work is in my own fork on a branch created from starter `main`.
 - [ ] My architecture share URL, committed diagram export, and overview are present; the architecture check passes and the instructor has view access.
 - [ ] My `CLAUDE.md` includes the feature, acceptance criteria, architecture, and unique agent-name mapping.
-- [ ] All five required agent roles and at least one Skill are learner-authored and use my unique prefix.
+- [ ] All six required agent roles and at least one Skill are learner-authored and use my unique prefix.
 - [ ] I recorded implementation approval and at least two delegation examples.
-- [ ] Real tests and the production build pass; results are in `evidence/validation.md`.
+- [ ] My commit hook is installed, and all code commits pass the complete test suite and build without bypassing validation.
+- [ ] Unit tests, all other tests, and the production build pass; results are in `evidence/validation.md`.
 - [ ] Production approval, the live URL, and verification are in `evidence/deployment.md`.
 - [ ] I completed the [Definition of Done](DEFINITION-OF-DONE.md) and prepared my demo.
 - [ ] My PR targets instructor `main` from my fork's submission branch, contains evidence links, and is ready for review.

@@ -11,7 +11,8 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 ## Development commands
 
 - How is the application installed and run locally?
-- What commands run real automated tests and a production build?
+- What real commands will `test:unit`, `test`, and `build` execute? How will `npm test` include every additional suite?
+- How will you require all tests to pass before code commits and ensure the [commit hook](docs/TESTING.md) remains installed?
 
 ## Learner identity and naming
 
@@ -22,6 +23,7 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 ## Agent responsibilities and delegation
 
 - What responsibilities, context, and allowed actions will each required agent have?
+- How will your Unit Testing Agent author and run focused tests, and how will the Test Agent independently verify the complete suite?
 - When should the Lead Agent delegate, and when should it work directly?
 - How will results, failures, and disagreements return to the coordinating agent?
 

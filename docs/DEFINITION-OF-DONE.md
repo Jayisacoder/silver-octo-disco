@@ -24,7 +24,8 @@ The project is Done only when all required evidence exists.
 - [ ] Lead Agent exists.
 - [ ] Research Agent exists.
 - [ ] Developer Agent exists.
-- [ ] Test Agent exists.
+- [ ] Unit Testing Agent exists and authors/runs meaningful unit tests.
+- [ ] Test Agent exists and independently verifies the full suite and build.
 - [ ] DevOps Agent exists.
 - [ ] Agent responsibilities are bounded.
 - [ ] Agent filenames and `name` values match and use my unique learner prefix; Skill names and directories use it too.
@@ -32,7 +33,8 @@ The project is Done only when all required evidence exists.
 
 ## Validation
 
-- [ ] Automated tests pass.
+- [ ] Real unit tests and all additional project suites pass through `npm run test:all`.
+- [ ] The commit hook is installed and all tests/build pass before code commits; no bypasses or disabled failing tests.
 - [ ] Production build passes.
 - [ ] Git changes were reviewed.
 - [ ] Acceptance criteria were checked.

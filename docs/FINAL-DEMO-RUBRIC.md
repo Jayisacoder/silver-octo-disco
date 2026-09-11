@@ -23,7 +23,7 @@ Suggested demo length: **10–12 minutes**
 2. Why did you create this agent instead of letting the Lead Agent do the work?
 3. What information does your subagent need?
 4. What information should it not need?
-5. What would happen if your Test Agent finds a failure?
+5. What does your Unit Testing Agent test, how does the Test Agent verify all testing, and how does a failing test block a commit?
 6. Why should the Developer Agent not deploy production code?
 7. What evidence must exist before deployment?
 8. Which environment variables can safely be exposed to the browser?

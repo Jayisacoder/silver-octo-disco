@@ -12,7 +12,7 @@ Export your diagram and commit it as `docs/architecture/system-architecture.png`
 The diagram must show:
 
 - The user, application components, and any data stores or external services.
-- All five required agent roles, labeled with your unique agent identifiers.
+- All six required agent roles, labeled with your unique agent identifiers.
 - Delegation and return paths, including how your Skill is used.
 - Testing, human approval gates, and the deployment target.
 

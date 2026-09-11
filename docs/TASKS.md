@@ -9,6 +9,7 @@ Use the checkboxes as the learner's project tracker. Follow the [README mileston
 - [ ] Follow the [submission guide](SUBMISSION.md) to clone organizational `main` from https://github.com/LaunchPadPhilly/claude-code-agent-project.
 - [ ] Create your personal GitHub fork, rename the organizational remote to `upstream`, and add your fork as `origin`.
 - [ ] Verify both remote URLs and create your submission branch from starter `main`.
+- [ ] Install Node.js/npm and Python 3, then run `npm run hooks:install`; verify `git config --get core.hooksPath` prints `.githooks`.
 - [ ] Choose your unique learner ID and record it with your GitHub username in `CLAUDE.md`.
 - [ ] Plan your prefixed agent and Skill names; record the role-to-name mapping and architecture in `CLAUDE.md`.
 
@@ -105,6 +106,15 @@ Use the checkboxes as the learner's project tracker. Follow the [README mileston
 - [ ] Fix failures before continuing.
 - [ ] Record results in `evidence/validation.md`.
 
+### Story 4.6 — Unit Testing Agent
+
+- [ ] Create your own `<learner-id>-unit-testing.md` in `.claude/agents/` with matching `name`.
+- [ ] Define how it writes and runs unit tests for expected behavior, edge cases, and failure paths.
+- [ ] Configure `npm run test:unit` to execute real tests once and fail on failures or zero tests.
+- [ ] Configure `npm test` to run every other required project suite; use non-watch commands.
+- [ ] Run `npm run test:all` and `npm run build`; fix all failures before committing.
+- [ ] Have the Test Agent independently verify results and record evidence.
+
 ### Story 4.5 — DevOps Agent
 
 - [ ] Create your own `<learner-id>-devops.md` in `.claude/agents/`.
@@ -136,6 +146,13 @@ Suggested learner command:
 ```text
 APPROVED: implementation plan
 ```
+
+### Commit Gate — All Tests Must Pass
+
+- [ ] Read [Testing and commit requirements](TESTING.md) and install the hook in every clone.
+- [ ] Stage the intended changes; resolve unstaged edits and untracked files before committing.
+- [ ] Let the commit hook run all tests and the build; fix failures before retrying.
+- [ ] Do not bypass hooks, omit suites, or disable failing tests to commit.
 
 ### Story 5.2 — Production Gate
 

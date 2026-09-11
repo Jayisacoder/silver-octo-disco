@@ -121,6 +121,20 @@ As a learner, I want a DevOps Agent so that deployment is handled by a specializ
 
 ---
 
+### Story 4.6
+
+As a learner, I want a Unit Testing Agent so that individual units of application behavior have meaningful automated tests.
+
+**Acceptance Criteria**
+
+- learner creates a uniquely named Unit Testing Agent with bounded responsibilities
+- tests cover expected behavior, edge cases, and failures without hiding failures or using empty passing commands
+- unit tests run through `npm run test:unit` in non-watch mode
+- the Test Agent independently checks the complete suite and build
+- all tests and the build pass before code commits through the installed commit hook
+
+---
+
 ## Feature 5 — Approval Gates
 
 ### Story 5.1
@@ -185,6 +199,7 @@ The learner can explain:
 - agent vs subagent
 - why each subagent exists
 - why human approval gates exist
+- what unit tests the Unit Testing Agent created and ran
 - what the Test Agent validated
 - what the DevOps Agent performed
 - how secrets are protected

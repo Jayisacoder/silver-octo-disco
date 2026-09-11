@@ -56,10 +56,13 @@ The learner designs and creates a Lead Agent and specialized subagents with clea
 - Lead Agent
 - Research Agent
 - Developer Agent
+- Unit Testing Agent
 - Test Agent
 - DevOps Agent
 
 ### Evidence
+
+The Unit Testing Agent authors and runs focused unit tests for normal behavior, edge cases, and failures. The Test Agent independently verifies all suites, the production build, and acceptance criteria. Learners design both agents.
 
 The final demo must show at least two examples of deliberate delegation.
 
@@ -76,6 +79,10 @@ Implementation plan approval.
 ### Gate B
 
 Production deployment approval.
+
+### Commit gate
+
+All tests and the production build must pass before code commits. Install the [commit hook](TESTING.md), configure real test commands, and fix failures before retrying a commit.
 
 ### Evidence
 

@@ -9,7 +9,8 @@ Build a small AI software development team using Claude Code. A Lead Agent coord
 - move from one coding assistant to specialized agent roles
 - create reusable development Skills
 - delegate bounded work
-- introduce independent testing
+- create a dedicated Unit Testing Agent and a separate Test Agent for independent full-suite validation
+- require all tests to pass before code commits
 - require human approval at critical transitions
 - deploy a validated production application to Vercel
 - explain the architecture during a live technical demo

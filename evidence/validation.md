@@ -31,6 +31,22 @@ Learner approval record and date (complete before implementation):
 | 2 | | PASS / FAIL | |
 | 3 | | PASS / FAIL | |
 
+## Unit Testing Agent
+
+Unique agent name:
+
+Unit test command (`npm run test:unit`):
+
+Results and covered behaviors / edge cases / failures:
+
+## Commit Gate
+
+Hook configuration (`git config --get core.hooksPath`):
+
+Full test command (`npm run test:all`) and actual results:
+
+Code commit(s) validated without bypassing the hook:
+
 ## Automated Tests
 
 Command:
