@@ -198,10 +198,18 @@ Choose and document your deployment method, including how it enforces the produc
 - [ ] Explain how production was verified.
 - [ ] Answer oral-defense questions without relying entirely on Claude.
 
+## Architecture Gate — Required Submission Evidence
+
+- [ ] Create your own diagram in Figma, Excalidraw, or an equivalent tool showing all content required in [System Architecture](architecture/README.md).
+- [ ] Fill in the diagram share URL and overview, and commit the diagram export at the specified path.
+- [ ] Give the instructor view access and verify the shared link.
+- [ ] Run `python3 scripts/check-architecture.py` and fix failures before submitting for assessment.
+
 ## Submission — GitHub Pull Request
 
 - [ ] Complete the [submission checklist](SUBMISSION.md#submission-checklist).
 - [ ] Push your completed work to your fork's submission branch.
 - [ ] Open a PR to instructor `main`, complete its evidence template, and mark it ready for review.
+- [ ] Wait for **Architecture evidence** to pass and include both the shared URL and committed diagram link in the PR.
 - [ ] Use the PR URL as your submission and respond to instructor feedback on the same branch.
 - [ ] Keep the submission PR unmerged so instructor `main` remains starter-only.

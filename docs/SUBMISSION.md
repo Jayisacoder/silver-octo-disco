@@ -51,6 +51,14 @@ Follow the [README milestones](../README.md#steps-to-the-goal) and [task checkli
 
 Add your implementation plan and dated learner approval to `evidence/validation.md` before implementation. Record at least two delegation examples there, identifying the agent, delegated task, result, and why delegation was appropriate. Fill in actual validation results and deployment evidence; unchecked or blank evidence is not completion.
 
+## Architecture gate — required before submission
+
+Complete [System Architecture](architecture/README.md) with a specific shared diagram URL from Figma, Excalidraw, or an equivalent tool; a committed PNG/SVG/PDF export; and a written system overview. Show the application components, uniquely named agents, delegation and return paths, Skill, approval gates, and deployment. Give the instructor view access.
+
+Run `python3 scripts/check-architecture.py` from the repository root (Python 3 required). Missing, empty, or placeholder evidence fails the check. Do not submit for assessment until it passes. The **Architecture evidence** PR check uses the instructor repository’s validator, so editing your copy of the validator does not bypass the check.
+
+GitHub allows a PR to open before checks run. An open PR with missing evidence is incomplete and must not be accepted. The instructor must also open the shared link and inspect the diagram: the automated check does not verify link permissions or design correctness.
+
 ## 4. Push and open your submission PR
 
 Review `git status` and `git diff`; confirm no secrets or generated dependencies are included. Then commit and push your work (replace the username placeholder):
@@ -69,13 +77,14 @@ On GitHub, open a pull request and use **compare across forks** if needed:
 - **Compare branch:** `submission/YOUR-GITHUB-USERNAME-project-3`
 - **Title:** `Project 3 submission — YOUR-GITHUB-USERNAME`
 
-Complete the PR template with your own evidence. Link files from your submission branch, so the reviewer sees your completed work. If you opened a draft early, mark it ready for review when the checklist is complete. Your submission artifact is this PR URL, not only a fork URL or deployment URL.
+Complete the PR template with your own evidence, including the diagram share URL and a link to the committed export. Wait for **Architecture evidence** to pass before marking your submission ready for review. Link files from your submission branch, so the reviewer sees your completed work. If you opened a draft early, mark it ready for review when the checklist is complete. Your submission artifact is this PR URL, not only a fork URL or deployment URL.
 
 Respond to instructor feedback by committing and pushing to the same branch; the PR updates automatically. Re-run relevant validation and refresh evidence after changes. Keep your fork, branch, and live deployment available through assessment.
 
 ## Submission checklist
 
 - [ ] My work is in my own fork on a branch created from starter `main`.
+- [ ] My architecture share URL, committed diagram export, and overview are present; the architecture check passes and the instructor has view access.
 - [ ] My `CLAUDE.md` includes the feature, acceptance criteria, architecture, and unique agent-name mapping.
 - [ ] All five required agent roles and at least one Skill are learner-authored and use my unique prefix.
 - [ ] I recorded implementation approval and at least two delegation examples.
@@ -86,7 +95,7 @@ Respond to instructor feedback by committing and pushing to the same branch; the
 
 ## Instructor review policy
 
-Learner submission PRs are for assessment and feedback. Keep starter `main` unchanged when assessing learner submissions. Review the fork branch and record feedback in the PR; close the PR after assessment without merging.
+Learner submission PRs are for assessment and feedback. Accept a submission only when **Architecture evidence** passes on its current revision and you have opened the shared link and confirmed the diagram meets the required content in [System Architecture](architecture/README.md). Record that verification in your PR review; request changes for missing access, an empty or inaccurate diagram, or a mismatch with the implementation. Recheck updated architecture evidence after revisions. Keep starter `main` unchanged when assessing learner submissions. Review the fork branch and record feedback in the PR; close the PR after assessment without merging.
 
 ## Reference documentation
 

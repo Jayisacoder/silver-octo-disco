@@ -203,5 +203,6 @@ As a learner, I want to submit my work through a fork and pull request so that m
 - work starts from starter `main` in the learner's own fork and submission branch
 - agent filenames and identifiers use a unique learner prefix, with matching Skill naming
 - a ready-for-review PR targets instructor `main` and links the required evidence
+- architecture evidence includes a shared diagram URL, committed export, and overview; the PR check passes and the instructor verifies access and content before acceptance
 - feedback is addressed on the same submission branch
 - learner submissions are reviewed without merging into starter `main`

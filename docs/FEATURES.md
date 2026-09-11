@@ -132,5 +132,7 @@ The learner works in a personal fork and submits a ready-for-review pull request
 - fork and submission branch
 - unique role-to-agent-name mapping
 - PR URL with completed checklist and evidence links
+- required shared architecture URL, committed diagram export, and overview
+- passing architecture check and instructor verification of diagram access and content
 
 Submission PRs are reviewed without merging submissions into starter `main`.

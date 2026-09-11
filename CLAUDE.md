@@ -17,7 +17,7 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 
 - What are your GitHub username and unique learner ID from the [submission guide](docs/SUBMISSION.md)?
 - What prefixed filename and matching agent `name` will you use for each required role? Add a role-to-name table.
-- How does your architecture connect these agents? Add your own diagram.
+- How does your architecture connect these agents? Create your own diagram and complete the required [architecture evidence](docs/architecture/README.md), including its share URL, committed export, and overview.
 
 ## Agent responsibilities and delegation
 

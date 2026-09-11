@@ -59,6 +59,13 @@ The project is Done only when all required evidence exists.
 - [ ] Learner explains delegation decisions.
 - [ ] Learner answers oral-defense questions.
 
+## Architecture Gate
+
+- [ ] [System Architecture](architecture/README.md) contains the shared diagram URL, committed export path, and written overview.
+- [ ] The diagram shows components, uniquely named agents, delegation, Skill use, approval gates, and deployment.
+- [ ] The **Architecture evidence** check passes for the current PR revision.
+- [ ] The instructor can open the shared link and has confirmed the architecture in their PR review.
+
 ## Submission
 
 - [ ] Work is committed and pushed to my own GitHub fork on a submission branch from starter `main`.

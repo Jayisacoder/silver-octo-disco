@@ -1,5 +1,7 @@
 # Final Demo Rubric
 
+Before a submission is accepted, its **Architecture evidence** check must pass and the instructor must verify the link and diagram required by [System Architecture](architecture/README.md).
+
 Suggested demo length: **10–12 minutes**
 
 | Area | Evidence | Points |

@@ -56,6 +56,8 @@ Keep your project work on this branch and push it to your own fork.
 
 Read [Project 3](docs/project-ideas/03-software-development-team.md) and complete the prompts in [CLAUDE.md](CLAUDE.md). Define your feature, intended user, acceptance criteria, architecture, and agent responsibilities. Choose your unique learner prefix using the [naming guide](docs/SUBMISSION.md#2-give-your-agents-unique-names).
 
+Create your system architecture in Figma, Excalidraw, or an equivalent diagram tool. Complete [System Architecture](docs/architecture/README.md) with a shared diagram URL, a committed PNG/SVG/PDF export, and your system overview. Give the instructor view access.
+
 From the repository folder, start Claude Code:
 
 ```bash
@@ -84,7 +86,7 @@ Follow these milestones in order. Use the detailed [task checklist](docs/TASKS.m
 |---|---|---|
 | 1. Set up | Clone [organizational `main`](https://github.com/LaunchPadPhilly/claude-code-agent-project), create your GitHub fork, connect it as `origin`, and create your submission branch. | Your fork URL and branch; see [submission instructions](docs/SUBMISSION.md). |
 | 2. Define | Read Project 3 and write the feature, intended user, constraints, and 3–5 measurable acceptance criteria. | Your project definition in `CLAUDE.md`. |
-| 3. Design | Plan your agent responsibilities, delegation, Skill, approval gates, and architecture. Reserve your unique naming prefix. | Your design in `CLAUDE.md`, including a role-to-agent-name table and architecture diagram. |
+| 3. Design | Plan your agent responsibilities, delegation, Skill, approval gates, and architecture. Reserve your unique naming prefix. | Your design in `CLAUDE.md`, role-to-agent-name table, and [architecture evidence](docs/architecture/README.md) with shared URL and committed diagram export. |
 | 4. Approve | Present your implementation plan and review its scope and risks. | Dated learner approval in `evidence/validation.md` before implementation. |
 | 5. Build | Author your agents and Skill, implement your feature, and configure real test/build commands. | Working application, five required agent roles, one reusable Skill, and two recorded delegation examples. |
 | 6. Validate | Run tests and a production build; check every acceptance criterion and review your changes. Fix failures. | Commands, actual results, and delegation examples in `evidence/validation.md`. |
@@ -101,15 +103,26 @@ Use [src/](src/README.md) and [tests/](tests/README.md), or adapt the structure 
 
 ## How to submit your project
 
-### 1. Complete the readiness checklist
+### 1. Pass the architecture gate
 
-- [ ] Complete your project instructions, architecture, five required agents, and at least one Skill with unique names.
+Complete [System Architecture](docs/architecture/README.md): shared diagram URL, committed diagram export, and written overview are all required. Show components, uniquely named agents, delegation paths, your Skill, approval gates, and deployment. Run this check from the repository root (Python 3 required):
+
+```bash
+python3 scripts/check-architecture.py
+```
+
+**Do not submit for assessment until this passes.** The same check runs on your PR using instructor-controlled validation. Missing evidence makes the **Architecture evidence** check fail. GitHub can still open a draft or PR, but the instructor will not accept it until the check passes and they confirm the shared link is accessible and the diagram describes your system.
+
+### 2. Complete the readiness checklist
+
+- [ ] Complete your project instructions, five required agents, and at least one Skill with unique names.
+- [ ] Commit your architecture link, diagram export, and overview; pass the architecture check and give the instructor view access.
 - [ ] Record implementation approval and two delegation examples in [validation evidence](evidence/validation.md).
 - [ ] Run your real test and build commands, fix failures, and record the actual results.
 - [ ] Record production approval, the live URL, and verification in [deployment evidence](evidence/deployment.md).
 - [ ] Complete the [Definition of Done](docs/DEFINITION-OF-DONE.md) and prepare your 10–12 minute demo.
 
-### 2. Commit and push to your fork
+### 3. Commit and push to your fork
 
 From your submission branch, review the changes and confirm you are not including secrets or generated dependencies:
 
@@ -125,7 +138,7 @@ git push -u origin submission/YOUR-GITHUB-USERNAME-project-3
 
 Check the staged changes before running the commit. If all work is already committed, skip staging and committing and push the branch.
 
-### 3. Open a pull request to the instructor repository
+### 4. Open a pull request to the instructor repository
 
 On the [organizational repository](https://github.com/LaunchPadPhilly/claude-code-agent-project), open **Pull requests → New pull request → compare across forks**. Select:
 
@@ -138,13 +151,13 @@ On the [organizational repository](https://github.com/LaunchPadPhilly/claude-cod
 
 Review the changed files, click **Create pull request**, and use the title `Project 3 submission — YOUR-GITHUB-USERNAME`.
 
-### 4. Complete the PR description and submit its URL
+### 5. Complete the PR description and submit its URL
 
-Fill in the PR template with your GitHub username, learner prefix, feature description, and links to your architecture, agent definitions, Skill, approval records, delegation examples, test/build results, and live deployment. Link to files on your submission branch. Complete the checklist and mark the PR ready for review if it was a draft.
+Fill in the PR template with your GitHub username, learner prefix, feature description, and links to your architecture, agent definitions, Skill, approval records, delegation examples, test/build results, and live deployment. Link to files on your submission branch. Include the shared diagram URL and a link to the committed architecture export. Wait for **Architecture evidence** to pass, complete the checklist, and then mark the PR ready for review if it was a draft.
 
 **Your submission is the PR URL.** Copy it for your instructor; a fork URL or live application URL alone is not the full submission.
 
-### 5. Respond to feedback
+### 6. Respond to feedback
 
 Commit and push revisions to the same submission branch to update the existing PR. Re-run relevant checks and update evidence after changes. Keep your fork, branch, and deployment available through assessment. Submission PRs are reviewed and closed without merging into organizational `main`.
 
@@ -152,6 +165,7 @@ See the [full submission guide](docs/SUBMISSION.md) for naming rules and the com
 
 ## Evidence and assessment
 
+- [Required system architecture](docs/architecture/README.md)
 - [Validation evidence template](evidence/validation.md)
 - [Deployment evidence template](evidence/deployment.md)
 - [Definition of Done](docs/DEFINITION-OF-DONE.md)
