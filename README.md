@@ -12,6 +12,58 @@ Complete [Project 3 — AI Software Development Team](docs/project-ideas/03-soft
 
 Define your intended user, problem, constraints, and 3–5 measurable acceptance criteria before implementation.
 
+## Getting started: clone, fork, and prepare
+
+You need a GitHub account, Git installed locally, and access to Claude Code. Replace `YOUR-GITHUB-USERNAME` in every command with your actual GitHub username.
+
+### 1. Clone the organizational repository
+
+Open a terminal and run:
+
+```bash
+git clone --branch main --single-branch https://github.com/LaunchPadPhilly/claude-code-agent-project.git
+cd claude-code-agent-project
+```
+
+If you already cloned this repository, open that folder instead of cloning it again.
+
+### 2. Create your personal fork on GitHub
+
+Open [LaunchPadPhilly/claude-code-agent-project](https://github.com/LaunchPadPhilly/claude-code-agent-project), click **Fork**, select your personal account, and create the fork. Keep the repository name `claude-code-agent-project` and copy only `main` if offered.
+
+### 3. Connect your local clone to your fork
+
+Run these commands once in the folder you cloned:
+
+```bash
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR-GITHUB-USERNAME/claude-code-agent-project.git
+git remote -v
+```
+
+Check the output: `upstream` must point to `LaunchPadPhilly/claude-code-agent-project`, and `origin` must point to `YOUR-GITHUB-USERNAME/claude-code-agent-project`. If you already configured these remotes, verify them with `git remote -v` and skip the first two commands.
+
+### 4. Create your working branch
+
+```bash
+git switch main
+git switch -c submission/YOUR-GITHUB-USERNAME-project-3
+```
+
+Keep your project work on this branch and push it to your own fork.
+
+### 5. Define and design your project
+
+Read [Project 3](docs/project-ideas/03-software-development-team.md) and complete the prompts in [CLAUDE.md](CLAUDE.md). Define your feature, intended user, acceptance criteria, architecture, and agent responsibilities. Choose your unique learner prefix using the [naming guide](docs/SUBMISSION.md#2-give-your-agents-unique-names).
+
+From the repository folder, start Claude Code:
+
+```bash
+claude
+```
+
+Review your design and implementation plan, then record learner approval before implementation. Follow the milestones below and check off [Tasks](docs/TASKS.md) as you build, validate, and deploy.
+
 ## What you will create
 
 - Project-specific instructions in [CLAUDE.md](CLAUDE.md).
@@ -46,6 +98,57 @@ The placeholder test and build commands intentionally fail until you replace the
 Follow the [naming rules and fork/PR submission guide](docs/SUBMISSION.md). Every agent filename and its `name` field must use your learner prefix, such as `<learner-id>-lead`; use that same identifier in delegation references. Prefix your Skill names and directories too.
 
 Use [src/](src/README.md) and [tests/](tests/README.md), or adapt the structure to your chosen framework. Document required environment variable names in `.env.example`; never commit secret values.
+
+## How to submit your project
+
+### 1. Complete the readiness checklist
+
+- [ ] Complete your project instructions, architecture, five required agents, and at least one Skill with unique names.
+- [ ] Record implementation approval and two delegation examples in [validation evidence](evidence/validation.md).
+- [ ] Run your real test and build commands, fix failures, and record the actual results.
+- [ ] Record production approval, the live URL, and verification in [deployment evidence](evidence/deployment.md).
+- [ ] Complete the [Definition of Done](docs/DEFINITION-OF-DONE.md) and prepare your 10–12 minute demo.
+
+### 2. Commit and push to your fork
+
+From your submission branch, review the changes and confirm you are not including secrets or generated dependencies:
+
+```bash
+git branch --show-current
+git status
+git diff
+git add .
+git diff --cached
+git commit -m "Complete AI Software Development Team project"
+git push -u origin submission/YOUR-GITHUB-USERNAME-project-3
+```
+
+Check the staged changes before running the commit. If all work is already committed, skip staging and committing and push the branch.
+
+### 3. Open a pull request to the instructor repository
+
+On the [organizational repository](https://github.com/LaunchPadPhilly/claude-code-agent-project), open **Pull requests → New pull request → compare across forks**. Select:
+
+| Field | Value |
+|---|---|
+| Base repository | `LaunchPadPhilly/claude-code-agent-project` |
+| Base branch | `main` |
+| Head repository | Your personal fork |
+| Compare branch | `submission/YOUR-GITHUB-USERNAME-project-3` |
+
+Review the changed files, click **Create pull request**, and use the title `Project 3 submission — YOUR-GITHUB-USERNAME`.
+
+### 4. Complete the PR description and submit its URL
+
+Fill in the PR template with your GitHub username, learner prefix, feature description, and links to your architecture, agent definitions, Skill, approval records, delegation examples, test/build results, and live deployment. Link to files on your submission branch. Complete the checklist and mark the PR ready for review if it was a draft.
+
+**Your submission is the PR URL.** Copy it for your instructor; a fork URL or live application URL alone is not the full submission.
+
+### 5. Respond to feedback
+
+Commit and push revisions to the same submission branch to update the existing PR. Re-run relevant checks and update evidence after changes. Keep your fork, branch, and deployment available through assessment. Submission PRs are reviewed and closed without merging into organizational `main`.
+
+See the [full submission guide](docs/SUBMISSION.md) for naming rules and the complete submission checklist.
 
 ## Evidence and assessment
 
