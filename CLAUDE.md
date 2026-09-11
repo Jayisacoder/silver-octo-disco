@@ -8,6 +8,13 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 - What observable results define success?
 - What is outside the project scope?
 
+## Required technology design
+
+- How will Prisma persist and retrieve your feature data, and how will another developer initialize the database?
+- How will Google OAuth establish a session, protect server-side access, and handle sign-out or failed sign-in?
+- How will Prisma and Google OAuth work on Vercel, and what environment variable names and callback URLs need configuration?
+- How will you demonstrate the [required stack acceptance criteria](docs/REQUIRED-STACK.md)?
+
 ## Development commands
 
 - How is the application installed and run locally?

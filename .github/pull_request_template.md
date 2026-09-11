@@ -22,7 +22,9 @@ Link to files on your submission branch and fill every field.
 - Unit Testing Agent definition and unit-test results:
 - Full test-suite/build commands and actual results (`evidence/validation.md`):
 - Production approval and verification (`evidence/deployment.md`):
-- Live production URL:
+- Prisma schema, database setup instructions, and persistence test evidence:
+- Google OAuth implementation/setup and authentication/access test evidence:
+- Live Vercel URL and verification of Google sign-in/sign-out and Prisma-backed features:
 - Known limitations:
 
 ## Final checklist
@@ -35,7 +37,9 @@ Link to files on your submission branch and fill every field.
 - [ ] All six required agents exist, including a uniquely named Unit Testing Agent.
 - [ ] The commit hook is installed; all tests and the build passed before code commits without bypasses.
 - [ ] Real unit tests, every additional test suite, and the production build pass with evidence.
-- [ ] I verified the deployed feature and linked the live URL.
+- [ ] Prisma creates/retrieves persistent feature data; schema and database setup are committed.
+- [ ] Google OAuth sign-in/sign-out and server-protected access work, with failure/access tests.
+- [ ] Both required integrations work on Vercel; live evidence is linked and the instructor can sign in.
 - [ ] I completed the Definition of Done and prepared my 10–12 minute demo.
 - [ ] **Architecture evidence** passes; my shared diagram link works for the instructor and the committed export matches it.
 - [ ] This submission is ready for instructor review.

@@ -12,6 +12,16 @@ Complete [Project 3 — AI Software Development Team](docs/project-ideas/03-soft
 
 Define your intended user, problem, constraints, and 3–5 measurable acceptance criteria before implementation.
 
+## Required technologies
+
+Your application must use all three:
+
+- **Prisma ORM:** create and retrieve persistent application data through Prisma.
+- **Google OAuth:** working Google sign-in/sign-out and server-protected application access.
+- **Vercel:** a live deployment where Google sign-in and Prisma-backed features work.
+
+You choose the framework, compatible database, authentication library, and data model. Follow the [required stack and acceptance criteria](docs/REQUIRED-STACK.md); all three must work before your submission is accepted.
+
 ## Getting started: clone, fork, and prepare
 
 You need a GitHub account, Git, Node.js/npm, Python 3, and access to Claude Code. Replace `YOUR-GITHUB-USERNAME` in every command with your actual GitHub username.
@@ -65,7 +75,7 @@ The second command must print `.githooks`. Repeat setup for every new clone. The
 
 ### 6. Define and design your project
 
-Read [Project 3](docs/project-ideas/03-software-development-team.md) and complete the prompts in [CLAUDE.md](CLAUDE.md). Define your feature, intended user, acceptance criteria, architecture, and agent responsibilities. Choose your unique learner prefix using the [naming guide](docs/SUBMISSION.md#2-give-your-agents-unique-names).
+Read [Project 3](docs/project-ideas/03-software-development-team.md) and complete the prompts in [CLAUDE.md](CLAUDE.md). Define your feature, intended user, acceptance criteria, architecture, and agent responsibilities. Include Prisma persistence, Google OAuth, and Vercel in your design and acceptance criteria. Choose your unique learner prefix using the [naming guide](docs/SUBMISSION.md#2-give-your-agents-unique-names).
 
 Create your system architecture in Figma, Excalidraw, or an equivalent diagram tool. Complete [System Architecture](docs/architecture/README.md) with a shared diagram URL, a committed PNG/SVG/PDF export, and your system overview. Give the instructor view access.
 
@@ -83,7 +93,7 @@ Review your design and implementation plan, then record learner approval before 
 - At least one reusable Skill and your own agent definitions.
 - A Lead Agent, Research Agent, Developer Agent, Unit Testing Agent, Test Agent, and DevOps Agent with bounded responsibilities.
 - Your own delegation architecture, with at least two demonstrated delegation examples.
-- A working application, automated tests, and a production build.
+- A working application using Prisma ORM, Google OAuth, and Vercel, with automated tests and a production build.
 - Human approval gates for implementation and production deployment.
 - Validation evidence and a verified live Vercel deployment.
 
@@ -127,6 +137,7 @@ python3 scripts/check-architecture.py
 ### 2. Complete the readiness checklist
 
 - [ ] Complete your project instructions, six required agents, and at least one Skill with unique names.
+- [ ] Demonstrate Prisma-backed feature data and Google sign-in/sign-out with protected access on the live Vercel application; include the required setup and test evidence.
 - [ ] Commit your architecture link, diagram export, and overview; pass the architecture check and give the instructor view access.
 - [ ] Record implementation approval and two delegation examples in [validation evidence](evidence/validation.md).
 - [ ] Have your Unit Testing Agent write and run unit tests; have your Test Agent verify the complete suite and build.
@@ -168,7 +179,7 @@ Review the changed files, click **Create pull request**, and use the title `Proj
 
 ### 5. Complete the PR description and submit its URL
 
-Fill in the PR template with your GitHub username, learner prefix, feature description, and links to your architecture, agent definitions, Skill, approval records, delegation examples, test/build results, and live deployment. Link to files on your submission branch. Include the shared diagram URL and a link to the committed architecture export. Wait for **Architecture evidence** to pass, complete the checklist, and then mark the PR ready for review if it was a draft.
+Fill in the PR template with your GitHub username, learner prefix, feature description, and links to your architecture, agent definitions, Skill, approval records, delegation examples, test/build results, and live deployment. Link to files on your submission branch. Include the shared diagram URL and a link to the committed architecture export, plus your Prisma schema/setup, Google OAuth implementation/setup, and live Vercel verification. Wait for **Architecture evidence** to pass, complete the checklist, and then mark the PR ready for review if it was a draft.
 
 **Your submission is the PR URL.** Copy it for your instructor; a fork URL or live application URL alone is not the full submission.
 

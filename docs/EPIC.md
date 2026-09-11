@@ -29,7 +29,9 @@ The learner can independently:
 
 The Epic is complete when the learner presents:
 
-- working source code
+- working source code using Prisma ORM, Google OAuth, and Vercel
+- Prisma schema/setup and evidence of persistent feature data
+- Google sign-in/sign-out and protected-access evidence
 - `CLAUDE.md`
 - reusable Skills
 - agent definitions

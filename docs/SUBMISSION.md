@@ -50,6 +50,8 @@ Unique names avoid agent-file and identifier collisions. They do not eliminate c
 
 ## 3. Build and collect evidence
 
+Implement all [required technologies](REQUIRED-STACK.md): Prisma ORM persistence, Google OAuth sign-in and protected access, and a working Vercel deployment. Include links to the schema/setup, authentication implementation/setup, and live verification in your PR.
+
 Follow the [README milestones](../README.md#steps-to-the-goal) and [task checklist](TASKS.md). Record your design and role-to-name mapping in `CLAUDE.md`.
 
 Add your implementation plan and dated learner approval to `evidence/validation.md` before implementation. Record at least two delegation examples there, identifying the agent, delegated task, result, and why delegation was appropriate. Fill in actual validation results and deployment evidence; unchecked or blank evidence is not completion.
@@ -91,6 +93,7 @@ Respond to instructor feedback by committing and pushing to the same branch; the
 ## Submission checklist
 
 - [ ] My work is in my own fork on a branch created from starter `main`.
+- [ ] Prisma persists real feature data, Google OAuth protects access, and both work on Vercel with linked setup/test/live evidence.
 - [ ] My architecture share URL, committed diagram export, and overview are present; the architecture check passes and the instructor has view access.
 - [ ] My `CLAUDE.md` includes the feature, acceptance criteria, architecture, and unique agent-name mapping.
 - [ ] All six required agent roles and at least one Skill are learner-authored and use my unique prefix.
@@ -103,7 +106,7 @@ Respond to instructor feedback by committing and pushing to the same branch; the
 
 ## Instructor review policy
 
-Learner submission PRs are for assessment and feedback. Accept a submission only when **Architecture evidence** passes on its current revision and you have opened the shared link and confirmed the diagram meets the required content in [System Architecture](architecture/README.md). Record that verification in your PR review; request changes for missing access, an empty or inaccurate diagram, or a mismatch with the implementation. Recheck updated architecture evidence after revisions. Keep starter `main` unchanged when assessing learner submissions. Review the fork branch and record feedback in the PR; close the PR after assessment without merging.
+Learner submission PRs are for assessment and feedback. Accept a submission only when **Architecture evidence** passes on its current revision and you have opened the shared link and confirmed the diagram meets the required content in [System Architecture](architecture/README.md). Record that verification in your PR review; request changes for missing access, an empty or inaccurate diagram, or a mismatch with the implementation. Recheck updated architecture evidence after revisions. Also verify all [required technologies](REQUIRED-STACK.md) work before acceptance. Keep starter `main` unchanged when assessing learner submissions. Review the fork branch and record feedback in the PR; close the PR after assessment without merging.
 
 ## Reference documentation
 

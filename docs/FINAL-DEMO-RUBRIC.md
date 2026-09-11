@@ -2,6 +2,8 @@
 
 Before a submission is accepted, its **Architecture evidence** check must pass and the instructor must verify the link and diagram required by [System Architecture](architecture/README.md).
 
+The demo must also show Google sign-in/sign-out, protected access, and Prisma-backed feature data on Vercel, meeting the [required technology criteria](REQUIRED-STACK.md).
+
 Suggested demo length: **10–12 minutes**
 
 | Area | Evidence | Points |

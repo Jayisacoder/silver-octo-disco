@@ -61,6 +61,16 @@ Result:
 
 ```
 
+## Required Technology Tests
+
+Prisma schema and database setup instructions:
+
+Isolated test database setup and persistence results:
+
+Google OAuth/authentication setup instructions (no secret values):
+
+Sign-in failure, signed-out access, and applicable ownership test results:
+
 ## Production Build
 
 Command:

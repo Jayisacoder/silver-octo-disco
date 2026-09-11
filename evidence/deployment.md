@@ -57,3 +57,13 @@ Approval evidence:
 
 - [ ] PASS
 - [ ] FAIL
+
+## Required Technology Verification on Vercel
+
+Google sign-in, session, and sign-out results:
+
+Protected feature and signed-out access results:
+
+Prisma-backed feature write/read and persistence after reload results:
+
+Instructor sign-in access confirmed (no credentials or tokens):

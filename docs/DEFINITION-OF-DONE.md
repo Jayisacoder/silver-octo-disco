@@ -9,6 +9,13 @@ The project is Done only when all required evidence exists.
 - [ ] The application runs locally.
 - [ ] The production application is accessible.
 
+## Required Technologies
+
+- [ ] Prisma ORM creates and retrieves persistent feature data; schema and database setup instructions are committed.
+- [ ] Google OAuth sign-in, session handling, sign-out, and server-protected access work; failure/denied access and applicable ownership checks are tested.
+- [ ] Prisma persistence and Google sign-in work on the live Vercel deployment, with evidence and instructor access.
+- [ ] The architecture shows the required technology connections; setup instructions contain no secret values.
+
 ## Claude Code
 
 - [ ] `CLAUDE.md` contains project-specific instructions.

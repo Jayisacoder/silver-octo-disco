@@ -11,7 +11,8 @@ Export your diagram and commit it as `docs/architecture/system-architecture.png`
 
 The diagram must show:
 
-- The user, application components, and any data stores or external services.
+- The user, Google OAuth sign-in, application/session boundary, server-side Prisma access, persistent database, and Vercel deployment.
+- Connections between those required technologies and any additional external services.
 - All six required agent roles, labeled with your unique agent identifiers.
 - Delegation and return paths, including how your Skill is used.
 - Testing, human approval gates, and the deployment target.

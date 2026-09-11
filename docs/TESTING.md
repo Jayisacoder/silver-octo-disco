@@ -41,6 +41,12 @@ Use non-watch commands that finish with an exit code. Do not use empty echo comm
 
 The starter intentionally cannot pass the application test/build checks. Configure your framework, tests, and commands before your first project commit. The supplied gate tests verify submission infrastructure; they do not replace learner-authored application tests.
 
+## Required integration coverage
+
+Include Prisma persistence against an isolated test database, authentication/session behavior, denied or failed Google sign-in, signed-out access, and applicable ownership checks in your complete test suite. Use controlled authentication test inputs so commits do not wait for interactive Google consent. Never run destructive tests against production data.
+
+Separately record real Google sign-in/sign-out and the protected Prisma-backed feature on Vercel in deployment evidence. See [Required Project Technologies](REQUIRED-STACK.md).
+
 ## Before each commit
 
 1. Record actual test evidence in `evidence/validation.md`.

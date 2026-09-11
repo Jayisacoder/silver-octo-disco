@@ -4,6 +4,10 @@
 
 Build a small AI software development team using Claude Code. A Lead Agent coordinates specialized subagents to research, implement, test, and deploy a feature.
 
+## Required technologies
+
+Use **Prisma ORM** for persistent feature data, **Google OAuth** for sign-in and protected access, and **Vercel** for the live deployment. Meet the [required stack acceptance criteria](../REQUIRED-STACK.md). You design the schema, application, authentication integration, and deployment configuration.
+
 ## Goals
 
 - move from one coding assistant to specialized agent roles
@@ -34,7 +38,7 @@ Build a feedback form containing:
 - rating
 - comments
 
-Store or process the submission using the project's chosen backend/database.
+If you choose this feature, require Google sign-in and store/retrieve submissions through Prisma using your chosen compatible database. Demonstrate it on Vercel.
 
 ## Design your workflow
 

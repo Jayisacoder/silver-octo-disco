@@ -31,6 +31,17 @@ Use the checkboxes as the learner's project tracker. Follow the [README mileston
 
 ---
 
+## Required Stack — Prisma, Google OAuth, and Vercel
+
+- [ ] Read the [required technology acceptance criteria](REQUIRED-STACK.md) and include them in your plan.
+- [ ] Choose a compatible database and design your Prisma schema and database setup procedure.
+- [ ] Implement real feature-data writes and reads through Prisma and verify persistence.
+- [ ] Configure Google OAuth for local and deployed URLs; implement sign-in, sign-out, and server-side access protection.
+- [ ] Test denied/failed sign-in, signed-out access, and ownership rules where applicable.
+- [ ] Add isolated persistence and authentication checks to the full test command; keep production data out of tests.
+- [ ] Document configuration names in `.env.example` and setup instructions without secret values.
+- [ ] Verify Google sign-in and Prisma-backed features on Vercel after production approval, record evidence, and ensure instructor access.
+
 ## Feature 2 — Claude Code Configuration
 
 ### Story 2.1 Tasks

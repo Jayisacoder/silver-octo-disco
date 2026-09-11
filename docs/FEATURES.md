@@ -143,3 +143,16 @@ The learner works in a personal fork and submits a ready-for-review pull request
 - passing architecture check and instructor verification of diagram access and content
 
 Submission PRs are reviewed without merging submissions into starter `main`.
+
+---
+
+## Feature 9 — Required Application Technologies
+
+The learner implements [Prisma ORM, Google OAuth, and Vercel](REQUIRED-STACK.md) as working parts of the application.
+
+### Evidence
+
+- Prisma schema, database setup, and persistent feature-data writes/reads
+- Google sign-in, session, sign-out, and server-enforced access with tests
+- a live Vercel demonstration of both integrations
+- architecture and setup documentation covering all three technologies

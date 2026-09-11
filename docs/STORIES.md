@@ -221,3 +221,19 @@ As a learner, I want to submit my work through a fork and pull request so that m
 - architecture evidence includes a shared diagram URL, committed export, and overview; the PR check passes and the instructor verifies access and content before acceptance
 - feedback is addressed on the same submission branch
 - learner submissions are reviewed without merging into starter `main`
+
+---
+
+## Feature 9 — Required Application Technologies
+
+### Story 9.1
+
+As a learner, I want to deliver a deployed feature with authentication and persistent data so that I demonstrate a working full-stack application.
+
+**Acceptance Criteria**
+
+- Prisma creates and retrieves persistent feature data, with schema and setup committed
+- Google OAuth sign-in/sign-out works and protected operations enforce access on the server
+- automated tests cover persistence, authentication failures, and access rules
+- both integrations work on Vercel and are demonstrated with production evidence
+- the instructor can access and verify the required behavior before accepting the submission
