@@ -133,4 +133,4 @@ The learner works in a personal fork and submits a ready-for-review pull request
 - unique role-to-agent-name mapping
 - PR URL with completed checklist and evidence links
 
-Submission PRs are reviewed without merging solutions into starter `main`.
+Submission PRs are reviewed without merging submissions into starter `main`.

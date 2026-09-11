@@ -2,12 +2,9 @@
 
 Design, build, test, and explain your own Claude Code agent workflow, then deploy your application to Vercel with human approval.
 
-## Branches
+## Starting point
 
-- `main` is the learner starter. It contains assignment requirements, unanswered design prompts, and empty application and evidence scaffolding.
-- `solution` preserves the supplied reference agent definitions, Skills, and architecture. It is reference material, not a finished application.
-
-Start your work from `main`. The branches have independent histories so the starter history contains no supplied solutions.
+Start from `main`, which contains assignment requirements, design prompts, and empty application and evidence scaffolding.
 
 ## Your project
 

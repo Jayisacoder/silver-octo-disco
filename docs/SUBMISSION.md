@@ -23,7 +23,7 @@ git switch -c submission/YOUR-GITHUB-USERNAME-project-3
 
 Verify that `upstream` points to `LaunchPadPhilly/claude-code-agent-project` and `origin` points to your own GitHub fork before continuing. Push your submission branch to `origin`, as shown in step 4; do not push learner work to organizational `main`.
 
-Build from starter `main`. Do not copy or merge the reference `solution` branch into your submission.
+Build from starter `main` and author your own project.
 
 ## 2. Give your agents unique names
 
@@ -41,7 +41,7 @@ Use `<learner-id>-<role>` for every agent's filename stem and its frontmatter `n
 
 Prefix any additional agents too. Use the exact agent names in your instructions, delegation references, design diagram, and evidence. Role labels such as “Lead Agent” explain responsibility; they do not replace unique identifiers.
 
-Create Skills under `.claude/skills/<learner-id>-<skill-purpose>/SKILL.md` and use that same prefixed identifier for the Skill name. Write your own instructions and procedures; these naming examples are not agent or Skill solutions.
+Create Skills under `.claude/skills/<learner-id>-<skill-purpose>/SKILL.md` and use that same prefixed identifier for the Skill name. Write your own instructions and procedures using these naming conventions.
 
 Unique names avoid agent-file and identifier collisions. They do not eliminate conflicts in shared files such as `CLAUDE.md`, `README.md`, or application code. Work in your own fork and branch; do not overwrite another learner's work to resolve a conflict. Ask the instructor if an upstream update conflicts with your work.
 
@@ -86,7 +86,7 @@ Respond to instructor feedback by committing and pushing to the same branch; the
 
 ## Instructor review policy
 
-Learner submission PRs are for assessment and feedback. Do not merge learner solutions into starter `main`. Review the fork branch and record feedback in the PR; close the PR after assessment without merging. The existing `solution` branch remains the separate instructor reference.
+Learner submission PRs are for assessment and feedback. Keep starter `main` unchanged when assessing learner submissions. Review the fork branch and record feedback in the PR; close the PR after assessment without merging.
 
 ## Reference documentation
 

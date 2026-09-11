@@ -125,7 +125,7 @@ As a learner, I want a DevOps Agent so that deployment is handled by a specializ
 
 ### Story 5.1
 
-As a learner, I want to approve the implementation plan so that the AI cannot change code before I understand the proposed solution.
+As a learner, I want to approve the implementation plan so that the AI cannot change code before I understand the proposed implementation.
 
 **Acceptance Criteria**
 
@@ -204,4 +204,4 @@ As a learner, I want to submit my work through a fork and pull request so that m
 - agent filenames and identifiers use a unique learner prefix, with matching Skill naming
 - a ready-for-review PR targets instructor `main` and links the required evidence
 - feedback is addressed on the same submission branch
-- learner solutions are not merged into starter `main`
+- learner submissions are reviewed without merging into starter `main`

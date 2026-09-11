@@ -20,7 +20,7 @@ Use the checkboxes as the learner's project tracker. Follow the [README mileston
 - [ ] Define the application feature your agent team will build.
 - [ ] Write the project problem in your own words.
 - [ ] Identify the intended user.
-- [ ] Identify what a successful solution should do.
+- [ ] Identify what your completed application should do.
 
 ### Story 1.2 Tasks
 

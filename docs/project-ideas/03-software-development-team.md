@@ -14,7 +14,7 @@ Build a small AI software development team using Claude Code. A Lead Agent coord
 - deploy a validated production application to Vercel
 - explain the architecture during a live technical demo
 
-## Design your solution
+## Design your project
 
 - What components and agents does this project need, and why?
 - What context and allowed actions will each agent have?
