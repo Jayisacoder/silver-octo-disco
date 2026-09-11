@@ -2,20 +2,28 @@
 
 [README](../README.md) | [Task checklist](TASKS.md) | [Definition of Done](DEFINITION-OF-DONE.md)
 
-## 1. Fork and create your branch
+## 1. Clone the organizational repository and connect your fork
 
-1. Open [the instructor repository](https://github.com/LaunchPadPhilly/claude-code-agent-project) and choose **Fork** under your own GitHub account. Copy only `main` if offered.
-2. Clone your fork. Replace `YOUR-GITHUB-USERNAME` below with your actual username.
+1. Clone starter `main` directly from the [LaunchPadPhilly organizational repository](https://github.com/LaunchPadPhilly/claude-code-agent-project):
 
 ```bash
-git clone https://github.com/YOUR-GITHUB-USERNAME/claude-code-agent-project.git
+git clone --branch main --single-branch https://github.com/LaunchPadPhilly/claude-code-agent-project.git
 cd claude-code-agent-project
-git remote add upstream https://github.com/LaunchPadPhilly/claude-code-agent-project.git
-git switch main
+```
+
+2. Open [the organizational repository on GitHub](https://github.com/LaunchPadPhilly/claude-code-agent-project) and choose **Fork** under your own GitHub account. Copy only `main` if offered. Keep the repository name `claude-code-agent-project` for the commands below.
+3. In your existing local clone, rename the organizational remote to `upstream` and add your personal fork as `origin`. Replace `YOUR-GITHUB-USERNAME` with your actual username. You do not need to clone again.
+
+```bash
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR-GITHUB-USERNAME/claude-code-agent-project.git
+git remote -v
 git switch -c submission/YOUR-GITHUB-USERNAME-project-3
 ```
 
-`origin` is your fork; `upstream` is the instructor repository. Build from starter `main`. Do not copy or merge the reference `solution` branch into your submission.
+Verify that `upstream` points to `LaunchPadPhilly/claude-code-agent-project` and `origin` points to your own GitHub fork before continuing. Push your submission branch to `origin`, as shown in step 4; do not push learner work to organizational `main`.
+
+Build from starter `main`. Do not copy or merge the reference `solution` branch into your submission.
 
 ## 2. Give your agents unique names
 

@@ -4,9 +4,11 @@
 
 Use the checkboxes as the learner's project tracker. Follow the [README milestones](../README.md#steps-to-the-goal) in order; the feature groups below organize requirements, not permission to skip approval gates.
 
-## Setup — Fork and name your work
+## Setup — Clone, fork, and name your work
 
-- [ ] Follow the [submission guide](SUBMISSION.md) to fork, clone, and create your submission branch from `main`.
+- [ ] Follow the [submission guide](SUBMISSION.md) to clone organizational `main` from https://github.com/LaunchPadPhilly/claude-code-agent-project.
+- [ ] Create your personal GitHub fork, rename the organizational remote to `upstream`, and add your fork as `origin`.
+- [ ] Verify both remote URLs and create your submission branch from starter `main`.
 - [ ] Choose your unique learner ID and record it with your GitHub username in `CLAUDE.md`.
 - [ ] Plan your prefixed agent and Skill names; record the role-to-name mapping and architecture in `CLAUDE.md`.
 

@@ -33,7 +33,7 @@ Follow these milestones in order. Use the detailed [task checklist](docs/TASKS.m
 
 | Step | Action | Evidence before moving on |
 |---|---|---|
-| 1. Set up | Fork this repository, clone your fork, and create your submission branch. | Your fork URL and branch; see [submission instructions](docs/SUBMISSION.md). |
+| 1. Set up | Clone [organizational `main`](https://github.com/LaunchPadPhilly/claude-code-agent-project), create your GitHub fork, connect it as `origin`, and create your submission branch. | Your fork URL and branch; see [submission instructions](docs/SUBMISSION.md). |
 | 2. Define | Read Project 3 and write the feature, intended user, constraints, and 3–5 measurable acceptance criteria. | Your project definition in `CLAUDE.md`. |
 | 3. Design | Plan your agent responsibilities, delegation, Skill, approval gates, and architecture. Reserve your unique naming prefix. | Your design in `CLAUDE.md`, including a role-to-agent-name table and architecture diagram. |
 | 4. Approve | Present your implementation plan and review its scope and risks. | Dated learner approval in `evidence/validation.md` before implementation. |
