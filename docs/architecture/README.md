@@ -2,8 +2,8 @@
 
 Complete this document and commit your diagram export before submitting your project for assessment. The starter intentionally leaves the evidence fields empty.
 
-Diagram URL:
-Diagram export:
+Diagram URL: PENDING — needs a real Excalidraw/Figma/diagrams.net share link (see note below); browser automation could not obtain one in this environment
+Diagram export: docs/architecture/system-architecture.svg
 
 Use a specific HTTPS share link from Figma, FigJam, Excalidraw, diagrams.net, or an equivalent diagram tool. Give the instructor view access and verify that the shared link opens for them. A tool homepage or a local browser session is not a diagram share link.
 
@@ -18,6 +18,8 @@ The diagram must show:
 - Testing, human approval gates, and the deployment target.
 
 ## System overview
+
+The diagram has three panels. **(A) Application Architecture** shows the required-technology chain: a User signs in through Google OAuth, which establishes a NextAuth database-strategy session (the app/session boundary); authenticated requests reach Next.js Route Handlers, which query through a Prisma client enforcing a single compound `{ id, userId }` ownership filter (the IDOR defense — a missing task and a task owned by someone else both return an identical 404) against a PostgreSQL database; the whole app is deployed on Vercel. **(B) Agent Workflow & Delegation** is laid out as three swim lanes — an ALPHA lane (Lead, Research, and the Independent Test agent), a BRAVO lane (Database, Developer, Unit Testing, DevOps agents), and a SHARED lane (the human developers, both approval gates, and the Vercel deployment target) — with the real delegation sequence crossing lanes as work changes hands, the dashed red failure/return path from the Test Agent back to the Lead Agent, and the reusable `jayisacoder-agent-handoff` Skill's dashed-purple invocation lines into three representative agents. A GitHub branch cluster shows each learner's branches merging into `main`, which triggers deployment. **(C) Agent & Skill Reference** is a plain-language "who's who" panel explaining the user persona, every agent/subagent's role and owner, and why the Skill is a Skill rather than a one-off prompt.
 
 ## Submission gate
 
