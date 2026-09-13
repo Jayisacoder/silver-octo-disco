@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-agent-project-starter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node -e \"console.error('Setup required: add your project test command to package.json.'); process.exit(1)\"",
+    "build": "node -e \"console.error('Setup required: add your project production build command to package.json.'); process.exit(1)\"",
+    "hooks:install": "node scripts/install-hooks.mjs",
+    "check:commit": "node scripts/check-before-commit.mjs",
+    "test:unit": "node -e \"console.error('Setup required: add your real unit test command to package.json.'); process.exit(1)\"",
+    "test:all": "python3 -B scripts/test-architecture.py && node --test scripts/test-commit-gate.mjs && npm run test:unit && npm test"
+  }
+}
