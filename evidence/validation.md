@@ -159,3 +159,25 @@ Important findings: N/A (not evaluated by this agent).
 - [ ] NOT READY
 
 Reason: Code-level correctness and every acceptance criterion that does not require a live database or real Google OAuth are independently verified as READY — lint, typecheck, all 47 tests, and the production build all pass under my own re-run, and my own independent line-by-line read of `src/lib/auth.ts`, `src/lib/validation.ts`, `src/lib/prisma.ts`, `src/app/api/tasks/route.ts`, and `src/app/api/tasks/[id]/route.ts` confirms the session-before-DB-call ordering, the compound `{ id, userId }` ownership filter on every read/write, and correct handling of malformed/invalid input, including edge cases (`null` values, arrays, oversized payloads) beyond what the 47 unit tests already cover. Two new, minor, non-blocking findings from this independent pass: (1) unhandled Prisma exceptions fall through to Next's generic 500 rather than a structured error body, and (2) `description: null` is rejected rather than treated as "clear the field." Neither requires routing back to the Developer/Unit Testing Agent before Gate 2. **What is explicitly NOT YET DONE, and must happen before production/Vercel deployment approval:** real end-to-end persistence-across-reload, a true two-real-user IDOR test against live rows, and real Google OAuth sign-in/sign-out/failed-sign-in — all blocked in this sandbox by the absence of a real `DATABASE_URL` (Docker's daemon is not running, confirmed via `docker info`) and real Google OAuth credentials. This is a hard environment constraint, not a shortcut taken by any agent.
+
+---
+
+## Addendum — Real Infrastructure Verification (2026-09-13, Alpha/Lead Agent)
+
+Both minor findings above (unhandled-Prisma-error 500s, `description: null`) were fixed and covered by 3 new tests (50/50 total) in a separate commit (`e25967b`) before this addendum — see `docs/agent-handoffs/implementation.md` and `docs/agent-handoffs/unit-testing.md` for that work.
+
+After that, Docker Desktop was started on this machine and its daemon came up (previously unavailable). This closed most of the real-infrastructure gap that blocked full sign-off above, using a **disposable, auto-removing** local Postgres container (`docker run --rm`, ephemeral port, torn down and removed immediately after) — nothing persisted, no repo files changed by this step, no `.env` committed:
+
+- `npx prisma db push` succeeded against a real Postgres instance — the schema (enums, cascade FKs, unique constraints, indexes) is confirmed valid at the database level for the first time, not just syntactically (`prisma validate`).
+- Seeded two real `User` rows (Alice, Bob) with real `Session` rows and known `sessionToken`s directly in the database (the seeded-session-cookie strategy confirmed at Gate 1) — no Google involved.
+- Ran the real, built app (`next start`) against this real database and drove it with real HTTP requests (`curl`) using the seeded session cookies:
+  - Unauthenticated `POST /api/tasks` → real `401`.
+  - Alice creates a task **omitting `status`/`priority`** → response shows `"status":"TODO","priority":"MEDIUM"` — **Prisma's real `@default(TODO)`/`@default(MEDIUM)` firing at the database level, confirmed for the first time** (previously only proven at the mocked-handler level).
+  - **Bob (a real second user) requests Alice's real task by id — `GET`, `PATCH`, and `DELETE` all returned real `404`s** — the actual cross-user IDOR proof that was the single most important open item, now closed against live rows, not a mock.
+  - Alice `PATCH`es status/priority — persisted, `updatedAt` changed, re-`GET` after the change (and after killing/restarting the app process, proving the data lives in Postgres and not app memory) still returns the updated row.
+  - Empty title → real `422` `ValidationError`; malformed JSON body → real `400` `InvalidJSON`.
+  - `PATCH { "description": null }` → real `null` stored and returned, confirming the field-clearing fix against a real column.
+  - `DELETE` → real `204`; a second `DELETE` and a subsequent `GET` on the same id both → real `404` (idempotent, confirmed live).
+- Teardown: server process killed, container `docker stop`ped (auto-removed via `--rm`), temporary seed script deleted. `git status` confirmed clean — no trace of this verification left in the repo.
+
+**Updated status:** Acceptance Criteria #1–#11 below are now backed by real infrastructure evidence, not just mocked/code-level evidence, except real Google OAuth. **Still open, and still requires a human:** an actual Google OAuth client (Google Cloud Console) does not exist anywhere in this process — sign-in/sign-out/failed-sign-in against real Google credentials has still never been exercised, and criterion #12 (live Vercel deployment) is unchanged until that happens plus a real deployment.
