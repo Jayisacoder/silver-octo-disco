@@ -161,6 +161,28 @@ test('PATCH /tasks/:id returns 404 (not 500) when zero rows match (missing or no
   }
 });
 
+test('PATCH /tasks/:id returns a structured 500 (not an uncaught throw) when Prisma fails unexpectedly', async () => {
+  // src/app/api/tasks/[id]/route.ts wraps the updateMany/findFirst pair in a
+  // try/catch that returns internalErrorResponse() (src/lib/api-errors.ts)
+  // on any thrown error, instead of letting a real DB failure fall through
+  // to Next's generic unshaped 500. See docs/agent-handoffs/implementation.md,
+  // 2026-09-13 QA follow-up entry.
+  setMockSession(makeSession('user-1'));
+  const restore = mockPrismaTask(prisma, {
+    updateMany: async () => {
+      throw new Error('simulated database failure');
+    },
+  });
+  try {
+    const res = await PATCH(patchRequest({ title: 'updated' }), ctx);
+    assert.equal(res.status, 500);
+    const body = await res.json();
+    assert.deepEqual(body, { error: 'InternalError' });
+  } finally {
+    restore();
+  }
+});
+
 // ---------- DELETE ----------
 
 test('DELETE /tasks/:id returns 401 when there is no session', async () => {

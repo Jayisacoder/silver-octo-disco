@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { NextResponse } from 'next/server';
 
+import { internalErrorResponse } from '@/lib/api-errors';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { formatZodError, updateTaskSchema } from '@/lib/validation';
@@ -22,9 +23,14 @@ export async function GET(_request: Request, { params }: RouteContext) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const task = await prisma.task.findFirst({
-    where: { id: params.id, userId: session.user.id },
-  });
+  let task;
+  try {
+    task = await prisma.task.findFirst({
+      where: { id: params.id, userId: session.user.id },
+    });
+  } catch {
+    return internalErrorResponse();
+  }
 
   if (!task) {
     return NextResponse.json({ error: 'NotFound' }, { status: 404 });
@@ -62,18 +68,23 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   // not be made to also filter by userId in one call. `updateMany()` accepts an
   // arbitrary where clause and reports how many rows matched, which is what lets
   // the ownership filter and the mutation happen in a single Prisma call.
-  const result = await prisma.task.updateMany({
-    where: { id: params.id, userId: session.user.id },
-    data: parsed.data,
-  });
+  let task;
+  try {
+    const result = await prisma.task.updateMany({
+      where: { id: params.id, userId: session.user.id },
+      data: parsed.data,
+    });
 
-  if (result.count === 0) {
-    return NextResponse.json({ error: 'NotFound' }, { status: 404 });
+    if (result.count === 0) {
+      return NextResponse.json({ error: 'NotFound' }, { status: 404 });
+    }
+
+    task = await prisma.task.findFirst({
+      where: { id: params.id, userId: session.user.id },
+    });
+  } catch {
+    return internalErrorResponse();
   }
-
-  const task = await prisma.task.findFirst({
-    where: { id: params.id, userId: session.user.id },
-  });
 
   return NextResponse.json({ task });
 }
@@ -87,9 +98,14 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   // deleteMany with the compound where is idempotent-safe: a nonexistent or
   // already-deleted task simply matches zero rows, which we report as 404
   // rather than letting a "record not found" error surface as a 500.
-  const result = await prisma.task.deleteMany({
-    where: { id: params.id, userId: session.user.id },
-  });
+  let result;
+  try {
+    result = await prisma.task.deleteMany({
+      where: { id: params.id, userId: session.user.id },
+    });
+  } catch {
+    return internalErrorResponse();
+  }
 
   if (result.count === 0) {
     return NextResponse.json({ error: 'NotFound' }, { status: 404 });

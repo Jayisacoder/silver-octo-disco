@@ -190,3 +190,23 @@ test('formatZodError keeps only the first message per field when a field has mul
   const formatted = formatZodError(result.error);
   assert.equal(Object.keys(formatted.fields).filter((k) => k === 'title').length, 1);
 });
+
+test('updateTaskSchema accepts an explicit null description (clears the field on PATCH)', () => {
+  // description String? is nullable in prisma/schema.prisma; updateTaskSchema
+  // uses updateDescriptionSchema (.nullable().optional()) so an explicit
+  // `null` means "clear this field," distinct from omitting the key entirely
+  // (which means "leave it as-is"). See docs/agent-handoffs/implementation.md,
+  // 2026-09-13 QA follow-up entry.
+  const result = updateTaskSchema.safeParse({ description: null });
+  assert.equal(result.success, true);
+  assert.equal(result.data.description, null);
+});
+
+test('createTaskSchema still rejects an explicit null description (unchanged)', () => {
+  // createTaskSchema intentionally was NOT given the nullable variant - a
+  // brand-new task has no existing description to clear, so null is not a
+  // valid create-time value. Confirms the two schemas didn't converge by
+  // accident when updateDescriptionSchema was introduced.
+  const result = createTaskSchema.safeParse({ title: 'x', description: null });
+  assert.equal(result.success, false);
+});

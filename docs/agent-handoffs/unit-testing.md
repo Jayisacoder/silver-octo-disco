@@ -58,3 +58,43 @@ Lead Agent
 ## Required Action From Next Agent
 
 The Lead Agent should delegate independent QA to the Test Agent (`jayisacoder-test`) next. QA must not simply trust these unit-test results: it needs to run its own end-to-end verification against a real isolated test database with real seeded users/sessions (two distinct users A and B, confirming A cannot read/update/delete B's task via `404`, an unauthenticated request gets `401`, a full create→read→update→delete lifecycle persists and survives a fresh read, Prisma's real `@default(TODO)`/`@default(MEDIUM)` actually apply, and the production build/deploy path works), since everything in this handoff's route-handler coverage used a mocked session and a mocked Prisma client rather than real ones.
+
+---
+
+# 2026-09-13 Update: coverage for the QA follow-up fixes (InternalError 500, `description: null`)
+
+## Task
+
+Add focused unit test coverage for the two Developer Agent fixes described in `docs/agent-handoffs/implementation.md`'s "2026-09-13 Update: QA follow-up" entry: (1) every `prisma.task.*` call in both route files now catches an unexpected throw and returns `internalErrorResponse()` (`{ error: 'InternalError' }`, 500) instead of an uncaught exception; (2) `updateTaskSchema`'s `description` field now accepts an explicit `null` (clears the field), via a new `updateDescriptionSchema` variant, while `createTaskSchema`'s `description` field is unchanged and still rejects `null`. Both fixes were flagged in that handoff as not yet covered by any test. Existing 47 tests were not modified.
+
+## Work Completed
+
+1. **`tests/validation.test.mjs`** — added two tests: `updateTaskSchema` accepts `{ description: null }` (`safeParse` succeeds, `result.data.description === null`); `createTaskSchema` still rejects `{ title: 'x', description: null }` (confirms the two schemas did not converge by accident when the nullable variant was introduced for update only).
+2. **`tests/tasks-id-route.test.mjs`** — added one test: mocked `prisma.task.updateMany` (used by `PATCH`) to throw, then asserted the real, unmodified `PATCH` handler returns status `500` with body `{ error: 'InternalError' }` rather than the exception propagating uncaught. Chose `updateMany` over `findFirst`/`deleteMany` purely because it was the simplest to wire alongside the existing `PATCH` tests already in that file using the same `mockPrismaTask` helper — the same `try/catch` → `internalErrorResponse()` pattern is shared by all five wrapped Prisma calls across both route files, so this one case is representative of the others (GET/DELETE in `[id]/route.ts`, GET/POST in `route.ts`), which were not separately re-tested to avoid duplicating the same assertion five times.
+3. No changes to `tests/helpers/route-test-helpers.mjs` or `tests/helpers/module-loader.mjs` were needed — both new tests use the exact same mocking/import patterns already established there (`mockPrismaTask`, `setMockSession`/`makeSession`, `registerModuleLoader`).
+
+## Files Changed
+
+- `tests/validation.test.mjs` — 2 new tests appended after the existing `formatZodError` tests.
+- `tests/tasks-id-route.test.mjs` — 1 new test appended after the existing `PATCH ... 404 ...` test, before the `DELETE` section.
+- `docs/agent-handoffs/unit-testing.md` (this entry — appended, did not modify prior content).
+- Not modified: `tests/basic-config.test.mjs`, `tests/tasks-route.test.mjs`, `tests/helpers/**`, anything under `src/**`, `prisma/schema.prisma`, any other agent's handoff.
+
+## Tests/Verification
+
+- `npm run test:unit` (`node --test tests/**/*.test.mjs`) — **50/50 tests pass, exit code 0** (the pre-existing 47 + the 3 new tests above: 2 in `validation.test.mjs`, 1 in `tasks-id-route.test.mjs`).
+- `npm test` — same command per `package.json`, same result, **50/50 pass, exit code 0**.
+- Confirmed the existing 47 tests were not modified and still pass unchanged.
+
+## Problems or Risks
+
+- **The 500-path test covers only one of the five wrapped Prisma call sites** (`PATCH`'s `updateMany`), on the judgment that all five share the identical `try { ... } catch { return internalErrorResponse(); }` shape and therefore one representative case is sufficient rather than five near-duplicate assertions. If a future change makes the wrapping inconsistent across call sites, this would not catch it — flagging for the Test/QA Agent if broader confidence is wanted here.
+- No bugs found; both fixes behave exactly as described in `implementation.md`'s 2026-09-13 entry.
+
+## Next Agent
+
+Lead Agent
+
+## Required Action From Next Agent
+
+No further unit-testing action required for these two fixes. The Lead Agent may consider this closed out; the Test/QA Agent's next independent pass may optionally re-confirm the `InternalError` 500 shape against a real forced-failure scenario if it wants coverage beyond the mocked case above.

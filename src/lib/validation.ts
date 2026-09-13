@@ -14,10 +14,18 @@ const titleSchema = z
   .min(1, 'Title is required')
   .max(TITLE_MAX_LENGTH, `Title must be ${TITLE_MAX_LENGTH} characters or fewer`);
 
-const descriptionSchema = z
+const descriptionBaseSchema = z
   .string({ invalid_type_error: 'Description must be a string' })
-  .max(DESCRIPTION_MAX_LENGTH, `Description must be ${DESCRIPTION_MAX_LENGTH} characters or fewer`)
-  .optional();
+  .max(DESCRIPTION_MAX_LENGTH, `Description must be ${DESCRIPTION_MAX_LENGTH} characters or fewer`);
+
+const descriptionSchema = descriptionBaseSchema.optional();
+
+// PATCH-only variant: an explicit `null` means "clear this field" (the column
+// is nullable — `description String?` in prisma/schema.prisma) and is
+// distinct from `undefined`/omitted, which means "leave the field as-is."
+// `createTaskSchema` intentionally keeps `descriptionSchema` (optional-only,
+// no `null`) since a brand-new task has no existing value to clear.
+const updateDescriptionSchema = descriptionBaseSchema.nullable().optional();
 
 const statusSchema = z.nativeEnum(TaskStatus, {
   errorMap: () => ({ message: 'Status must be one of TODO, IN_PROGRESS, COMPLETED' }),
@@ -42,7 +50,7 @@ export const createTaskSchema = z
 export const updateTaskSchema = z
   .object({
     title: titleSchema.optional(),
-    description: descriptionSchema,
+    description: updateDescriptionSchema,
     status: statusSchema.optional(),
     priority: prioritySchema.optional(),
   })
