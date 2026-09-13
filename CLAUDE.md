@@ -23,9 +23,24 @@ This file is an unfinished design worksheet. Complete it for your AI Software De
 
 ## Learner identity and naming
 
-- What are your GitHub username and unique learner ID from the [submission guide](docs/SUBMISSION.md)?
-- What prefixed filename and matching agent `name` will you use for each required role? Add a role-to-name table.
-- How does your architecture connect these agents? Create your own diagram and complete the required [architecture evidence](docs/architecture/README.md), including its share URL, committed export, and overview.
+- GitHub username: `jayisacoder`
+- Unique learner ID: `jayisacoder`
+- The learner ID follows the naming pattern in [docs/SUBMISSION.md](docs/SUBMISSION.md): lowercase letters and hyphens only, matching the GitHub-based prefix used for agent files and names.
+
+### Role-to-name table
+
+| Role | Agent filename | Agent `name` |
+|---|---|---|
+| Lead Agent | `.claude/agents/jayisacoder-lead.md` | `jayisacoder-lead` |
+| Research Agent | `.claude/agents/jayisacoder-research.md` | `jayisacoder-research` |
+| Database Agent | `.claude/agents/jayisacoder-database.md` | `jayisacoder-database` |
+| Developer Agent | `.claude/agents/jayisacoder-developer.md` | `jayisacoder-developer` |
+| Unit Testing Agent | `.claude/agents/jayisacoder-unit-testing.md` | `jayisacoder-unit-testing` |
+| Test Agent | `.claude/agents/jayisacoder-test.md` | `jayisacoder-test` |
+| DevOps Agent | `.claude/agents/jayisacoder-devops.md` | `jayisacoder-devops` |
+
+- The architecture will connect these agents through the Lead Agent's delegation flow, the structured handoff documents in `docs/agent-handoffs/`, human approval gates, and the deployment path to Vercel.
+- Architecture evidence will be captured in [docs/architecture/README.md](docs/architecture/README.md) with a shared diagram URL, exported diagram file, and written overview.
 
 ## Agent responsibilities and delegation
 

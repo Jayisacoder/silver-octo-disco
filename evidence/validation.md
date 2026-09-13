@@ -2,106 +2,160 @@
 
 ## Project
 
-Project name:
+Project name: AI Software Development Team — Feature Request #1: User Task Management
 
-Date:
+Date: 2026-09-12
 
-Learner:
+Learner: Jayisacoder (learner ID: jayisacoder)
 
 ## Implementation Plan and Human Approval
 
-Plan and affected files:
+Plan and affected files (per `docs/agent-handoffs/research.md`, Gate 1 research handoff):
 
-Risks:
+- `prisma/schema.prisma`: add `Task` model (title, description, `TaskStatus`/`TaskPriority` native enums, timestamps, `userId` FK, `@@index([userId])`, `onDelete: Cascade`) plus the NextAuth-v4-adapter-required `User`/`Account`/`Session`/`VerificationToken` models (none exist yet).
+- `src/lib/auth.ts`: shared `authOptions` (GoogleProvider + `PrismaAdapter(prisma)` + `session: { strategy: "database" }`).
+- `src/app/api/auth/[...nextauth]/route.ts`: NextAuth route handler.
+- `src/app/api/tasks/route.ts` (list/create) and `src/app/api/tasks/[id]/route.ts` (get/update/delete): Route Handlers, each calling `getServerSession(authOptions)` and filtering every read/write by `{ id, userId }` in one query; task-not-found and task-owned-by-another-user both return `404`.
+- `zod`-based request validation returning `422` with field-level errors.
+- `.env.example`: document any additional variable names needed (no secret values).
+- Test suite additions covering persistence, ownership/IDOR, auth failure paths, and validation, against an isolated test database with a seeded `User`+`Session` row (no interactive Google consent).
+
+Risks (flagged by the Research Agent, accepted as scope for this pass unless stated otherwise below):
+
+- NextAuth v4 + App Router is a supported but older pairing — Developer Agent to verify against the installed `next-auth@4.24.7` release if anything behaves unexpectedly, rather than assuming v5/Auth.js patterns.
+- The seeded-session-cookie testing strategy is an architecture decision, not just a test detail — **confirmed in scope** as part of this approval (see below).
+- No optimistic concurrency control for this MVP — **accepted as an explicit, known limitation**, not a defect.
+- `title`'s zod max-length and the Prisma `@db.VarChar(n)` length must be kept as one agreed constant so an over-length title fails as a clean `422`, not an unhandled DB error.
 
 Learner approval record and date (complete before implementation):
+
+- **2026-09-12 — Alpha (this session, operated by Jayisacoder):** "this is aproval continue" — read as explicit Gate 1 approval of the research handoff (schema shape, Route Handlers architecture, ownership/IDOR pattern, validation approach, and the seeded-session-cookie testing strategy) to proceed to Step 3 (Database).
+- **Bravo:** not separately recorded in this session. The workflow requires Alpha *and* Bravo to approve Gate 1; this entry reflects only what was actually said here. If Bravo has not independently confirmed, get that recorded (in this file or their own session) before treating Gate 1 as fully satisfied.
 
 ## Delegation Examples
 
 | Named agent | Delegated task | Result / evidence | Why delegate? |
 |---|---|---|---|
-| | | | |
-| | | | |
+| `jayisacoder-research` | Research the Task Management feature: data model, Prisma/user relationship, auth/access-control approach, API architecture, validation, edge cases, testing strategy. | `docs/agent-handoffs/research.md` — full handoff with a concrete Prisma schema, ownership/IDOR pattern, Route Handlers recommendation, and testing strategy; reported back to the Lead Agent. | Research must be independent of implementation and read-only (Story 4.2); the Lead Agent does not write application code or make architecture calls itself. |
+| `jayisacoder-test` | Independent QA of the completed Task Management feature (implementation + unit tests already reported done). | `docs/agent-handoffs/qa.md` — independent re-run of lint/typecheck/tests/build, independent code read of `src/lib/*` and `src/app/api/tasks/**`, independent test-file critique, acceptance criteria table below. | Unit tests alone are not sufficient proof (Story 4.4/4.6) — the Test Agent must be independent from the Unit Testing Agent and verify results itself rather than trust the handoff. |
 
 ## Acceptance Criteria
 
 | # | Criterion | Result | Evidence |
 |---|---|---|---|
-| 1 | | PASS / FAIL | |
-| 2 | | PASS / FAIL | |
-| 3 | | PASS / FAIL | |
+| 1 | An authenticated user can create a task | PASS (code-level) | `src/app/api/tasks/route.ts` `POST`: requires `session.user.id` (401 otherwise), validates with `createTaskSchema`, calls `prisma.task.create({ data: { ..., userId: session.user.id } })`, returns 201. Exercised against a mocked session + mocked Prisma in `tests/tasks-route.test.mjs` ("POST creates a task scoped to the session user and returns 201") — real, unmodified handler code, mocked I/O boundary only. Real Google sign-in + real DB write not exercised in this environment — see BLOCKED item below. |
+| 2 | The task is persisted through Prisma | PASS (code-level) / BLOCKED-BY-ENVIRONMENT (real persistence) | All reads/writes go exclusively through `prisma.task.*` (`create`, `findMany`, `findFirst`, `updateMany`, `deleteMany`) — no raw SQL, no bypass. Confirmed by direct code read. Persistence surviving an actual write-then-reload against a real Postgres row was **not verified**: no `DATABASE_URL` is configured and Docker's daemon is not running in this sandbox (`docker info` fails to connect). Needs a real `DATABASE_URL` + `prisma db push` to close out. |
+| 3 | The task belongs to the authenticated user | PASS (code-level) | `userId` is taken only from `session.user.id`, never from the request body — `createTaskSchema`/`updateTaskSchema` are both `.strict()`, so a client-supplied `userId` key is rejected as unknown before the handler builds any Prisma call. Verified directly in the source and by `tests/tasks-route.test.mjs`/`tasks-id-route.test.mjs` ("rejects a spoofed userId ... never lets it reach Prisma"). |
+| 4 | The user can view their own tasks | PASS (code-level) | `GET /api/tasks` filters `findMany({ where: { userId: session.user.id } })`; `GET /api/tasks/[id]` filters `findFirst({ where: { id, userId } })`. No path fetches by `id` alone. Mocked-session/mocked-Prisma tests confirm the exact `where` shape. Real multi-user data was not exercised (BLOCKED — see below). |
+| 5 | The user can update their own tasks | PASS (code-level) | `PATCH /api/tasks/[id]` re-validates with `updateTaskSchema` (`.strict()`, partial), rejects an empty body (422), then `updateMany({ where: { id, userId }, data })`, re-reads the row with the same compound filter. Verified in source and in `tests/tasks-id-route.test.mjs`. |
+| 6 | The user can delete their own tasks | PASS (code-level) | `DELETE /api/tasks/[id]` → `deleteMany({ where: { id, userId } })`; `count === 0` → 404 (idempotent-safe on double-delete), success → 204. Verified in source and tests. |
+| 7 | Users cannot access another user's tasks | PASS (code-level) / BLOCKED-BY-ENVIRONMENT (real cross-user proof) | Every read/write uses the compound `{ id, userId }` filter in one Prisma call; "doesn't exist" and "exists but owned by someone else" both return an identical 404 (never 403), preventing existence-enumeration. Confirmed by direct code read and by tests that simulate "belongs to another user" via a mock returning zero matches. **This has never been executed against two real seeded users and real rows in an actual database** — that would require a real `DATABASE_URL`, which does not exist in this sandbox. True IDOR proof against live data is the single most important item to close before production approval. |
+| 8 | Invalid input is handled appropriately | PASS | `createTaskSchema`/`updateTaskSchema` (zod, `.strict()`) reject: missing/empty/whitespace-only title, over-length title/description, invalid enum values, non-string/array/boolean/null title, unknown keys (incl. spoofed `userId`), malformed JSON (400), empty PATCH body (422). Verified via 22 tests in `tests/validation.test.mjs` plus my own independent probe of cases not in that file (`null` for title/description/status, array title, boolean title, whole-body `null`/array, a 5MB description) — all correctly rejected, no crash, no hang. One genuine minor gap found independently: `description: null` is rejected rather than treated as "clear the field" — a UX nit, not a security or correctness defect. |
+| 9 | Unit tests cover important functionality | PASS | 47/47 tests pass (`npm run test:unit` / `npm test`, both `node --test`, exit 0): 22 pure validation tests, 8 tests on `/api/tasks`, 14 tests on `/api/tasks/[id]`, 3 pre-existing config tests. Independently reviewed the test files: assertions check actual captured Prisma call arguments (`where`/`data` shapes), not just status codes — not vacuous. |
+| 10 | Independent QA validates the complete feature | PASS | This QA pass: independently re-ran the full command suite, independently read all five implementation files line-by-line (not the handoff summaries), independently read and critiqued all three test files and both test helpers, independently probed zod edge cases beyond the existing 22 tests, and reasoned through malformed-`id`/unhandled-Prisma-error behavior from the code itself. Full detail in `docs/agent-handoffs/qa.md`. |
+| 11 | The application passes the required test/build checks | PASS | `npm run lint` → no warnings/errors. `npm run typecheck` → clean. `npm run test:unit` and `npm test` → 47/47 pass, exit 0. `npm run build` → compiles, typechecks, and generates all routes (`/`, `/api/auth/[...nextauth]`, `/api/tasks`, `/api/tasks/[id]`, all dynamic `ƒ`), exit 0 — all four commands re-run and confirmed by the Test Agent independently, not just re-reported from `implementation.md`. |
+| 12 | The feature is ready for Vercel deployment after human approval | BLOCKED-BY-ENVIRONMENT | Build succeeds with no real env values configured, and Route Handlers are correctly marked dynamic. However, nothing has been deployed or run against real Vercel-hosted Postgres/Google OAuth. Before production approval: provision a real `DATABASE_URL` (hosted Postgres) and run `prisma db push` against it; register real Google OAuth `client_id`/`client_secret` with the correct authorized redirect URI for the deployed `NEXTAUTH_URL`; set `NEXTAUTH_SECRET`/`AUTH_SECRET` real values in Vercel's environment variables (never committed); then re-verify sign-in, create/read/update/delete, and cross-user IDOR against the live deployment. |
 
 ## Unit Testing Agent
 
-Unique agent name:
+Unique agent name: `jayisacoder-unit-testing` (per `docs/agent-handoffs/unit-testing.md`)
 
-Unit test command (`npm run test:unit`):
+Unit test command (`npm run test:unit`): `node --test tests/**/*.test.mjs`
 
-Results and covered behaviors / edge cases / failures:
+Results and covered behaviors / edge cases / failures: 47/47 pass (re-confirmed independently by the Test Agent, not just re-reported). Covers: zod validation rejection/acceptance cases (22 tests), ownership-filter `where`/`data` shapes on every route (22 tests across both route files), 401/404/422/400/201/200/204 status codes, spoofed-`userId` rejection, identical-404-for-missing-vs-not-yours, idempotent double-delete, PATCH empty-body rejection, and status/priority pass-through-as-undefined so Prisma's `@default` would apply. Uses a mocked `next-auth/next` session and a mocked `prisma.task` client (real, unmodified handler/validation code) — does not and cannot prove real DB persistence, real cross-user IDOR against real rows, or real Google OAuth/session establishment. See `docs/agent-handoffs/qa.md` for the Test Agent's independent confirmation of this boundary.
 
 ## Commit Gate
 
-Hook configuration (`git config --get core.hooksPath`):
+Hook configuration (`git config --get core.hooksPath`): not evaluated by this agent — outside the Test Agent's assigned scope (lint/typecheck/test:unit/test/build only, per task instructions); the Lead Agent should confirm this separately if not already recorded.
 
-Full test command (`npm run test:all`) and actual results:
+Full test command (`npm run test:all`) and actual results: not run by this agent (task instructions scoped verification to `npm run lint`, `npm run typecheck`, `npm run test:unit`, `npm test`, `npm run build` specifically); see Automated Tests/Production Build sections below for what was actually run and its results.
 
-Code commit(s) validated without bypassing the hook:
+Code commit(s) validated without bypassing the hook: not evaluated by this agent.
 
 ## Automated Tests
 
 Command:
 
 ```bash
-
+npm run lint
+npm run typecheck
+npm run test:unit
+npm test
 ```
 
 Result:
 
 ```text
+> next lint
+✔ No ESLint warnings or errors
+(exit 0)
 
+> tsc --noEmit
+(no output, exit 0)
+
+> node --test tests/**/*.test.mjs
+# tests 47
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+(exit 0)
+
+npm test runs the identical command per package.json ("test" and "test:unit"
+are the same script) — same result, 47/47 pass, exit 0.
 ```
 
 ## Required Technology Tests
 
-Prisma schema and database setup instructions:
+Prisma schema and database setup instructions: `prisma/schema.prisma` defines `Task`/`TaskStatus`/`TaskPriority` plus the NextAuth-v4-adapter-required `User`/`Account`/`Session`/`VerificationToken` models (verified directly by reading the file). Setup procedure documented in `docs/agent-handoffs/database.md`: copy `.env.example` → `.env`, set a real `DATABASE_URL`, `npm run prisma:generate`, `npm run prisma:db:push`. **Not run against a real database in this environment** — confirmed independently: no `.env` file exists, `DATABASE_URL` is unset, and Docker's daemon is not running (`docker info` → "failed to connect to the docker API ... check if ... the daemon is running").
 
-Isolated test database setup and persistence results:
+Isolated test database setup and persistence results: `DATABASE_URL_TEST` is documented (name only, no value) in `.env.example` per `database.md`'s isolated-test-DB plan (seed a real `User`+`Session` row, point a `PrismaClient` at `DATABASE_URL_TEST`). **Never provisioned or exercised in this environment** — no second database exists here either. Persistence-across-reload was therefore not verified against real rows; only verified at the code level (all reads/writes route exclusively through `prisma.task.*`).
 
-Google OAuth/authentication setup instructions (no secret values):
+Google OAuth/authentication setup instructions (no secret values): `src/lib/auth.ts` configures `GoogleProvider` (reads `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` from env, no values in code) + `PrismaAdapter(prisma)` + `session: { strategy: 'database' }`; route wired at `src/app/api/auth/[...nextauth]/route.ts`. Verified directly by reading both files. Real Google OAuth credentials do not exist in this environment, so the actual consent/callback/session-creation flow was never executed here.
 
-Sign-in failure, signed-out access, and applicable ownership test results:
+Sign-in failure, signed-out access, and applicable ownership test results: Signed-out access (`401` before any DB call) is verified at the code level on all five handlers and by mocked-session tests (`setMockSession(null)` → 401, and the mock asserts the underlying Prisma method is never called). Real "denied/failed Google sign-in" and real session-cookie establishment/expiry were **not exercised** — no real OAuth flow is reachable in this sandbox. Ownership (cross-user 404s) verified at the code level and via mocked "belongs to another user" scenarios; a real two-seeded-user test against a live database was not run — see Acceptance Criteria #7 above.
 
 ## Production Build
 
 Command:
 
 ```bash
-
+npm run build
 ```
 
 Result:
 
 ```text
+▲ Next.js 14.2.15
+✓ Compiled successfully
+  Linting and checking validity of types ...
+  Collecting page data ...
+✓ Generating static pages (5/5)
+  Finalizing page optimization ...
+  Collecting build traces ...
 
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    1.37 kB        98.2 kB
+├ ○ /_not-found                          873 B          88.1 kB
+├ ƒ /api/auth/[...nextauth]              0 B                0 B
+├ ƒ /api/tasks                           0 B                0 B
+└ ƒ /api/tasks/[id]                      0 B                0 B
+
+(exit 0, no .env file present, DATABASE_URL unset — build succeeds anyway
+because Route Handlers/`/` are correctly marked dynamic (ƒ) rather than
+statically prerendered)
 ```
 
 ## Git Review
 
-Files changed:
+Files changed: Not evaluated by this agent — outside the assigned QA scope for this pass (see Commit Gate note above). The Lead Agent should confirm `git status`/`git diff` review separately before any commit if that hasn't already happened elsewhere in the workflow.
 
-```text
-
-```
-
-Important findings:
-
-```text
-
-```
+Important findings: N/A (not evaluated by this agent).
 
 ## Test Agent Recommendation
 
-- [ ] READY
+- [x] READY
 - [ ] NOT READY
 
-Reason:
+Reason: Code-level correctness and every acceptance criterion that does not require a live database or real Google OAuth are independently verified as READY — lint, typecheck, all 47 tests, and the production build all pass under my own re-run, and my own independent line-by-line read of `src/lib/auth.ts`, `src/lib/validation.ts`, `src/lib/prisma.ts`, `src/app/api/tasks/route.ts`, and `src/app/api/tasks/[id]/route.ts` confirms the session-before-DB-call ordering, the compound `{ id, userId }` ownership filter on every read/write, and correct handling of malformed/invalid input, including edge cases (`null` values, arrays, oversized payloads) beyond what the 47 unit tests already cover. Two new, minor, non-blocking findings from this independent pass: (1) unhandled Prisma exceptions fall through to Next's generic 500 rather than a structured error body, and (2) `description: null` is rejected rather than treated as "clear the field." Neither requires routing back to the Developer/Unit Testing Agent before Gate 2. **What is explicitly NOT YET DONE, and must happen before production/Vercel deployment approval:** real end-to-end persistence-across-reload, a true two-real-user IDOR test against live rows, and real Google OAuth sign-in/sign-out/failed-sign-in — all blocked in this sandbox by the absence of a real `DATABASE_URL` (Docker's daemon is not running, confirmed via `docker info`) and real Google OAuth credentials. This is a hard environment constraint, not a shortcut taken by any agent.
