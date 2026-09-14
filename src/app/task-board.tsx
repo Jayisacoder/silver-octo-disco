@@ -7,6 +7,7 @@ import type { TaskDTO } from '@/lib/types';
 
 const STATUS_OPTIONS = ['TODO', 'IN_PROGRESS', 'COMPLETED'] as const;
 const PRIORITY_OPTIONS = ['LOW', 'MEDIUM', 'HIGH'] as const;
+const PRIORITY_RANK: Record<(typeof PRIORITY_OPTIONS)[number], number> = { HIGH: 0, MEDIUM: 1, LOW: 2 };
 
 interface FieldErrorBody {
   error: string;
@@ -26,6 +27,7 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
   const [editError, setEditError] = useState<string | null>(null);
   const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<(typeof STATUS_OPTIONS)[number] | 'ALL'>('ALL');
+  const [sortByPriority, setSortByPriority] = useState(false);
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -108,6 +110,10 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
     setConfirmingDeleteId(null);
   }
 
+  const visibleTasks = tasks
+    .filter((task) => statusFilter === 'ALL' || task.status === statusFilter)
+    .sort((a, b) => (sortByPriority ? PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority] : 0));
+
   return (
     <section>
       <form
@@ -155,12 +161,13 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
             {option}
           </button>
         ))}
+        <button type="button" onClick={() => setSortByPriority((prev) => !prev)} aria-pressed={sortByPriority}>
+          {sortByPriority ? 'Sorted by priority (HIGH first)' : 'Sort by priority'}
+        </button>
       </div>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {tasks
-          .filter((task) => statusFilter === 'ALL' || task.status === statusFilter)
-          .map((task) => (
+        {visibleTasks.map((task) => (
           <li
             key={task.id}
             style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '0.75rem', marginBottom: '0.5rem' }}
@@ -250,10 +257,7 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
           </li>
         ))}
         {tasks.length === 0 && <p>No tasks yet.</p>}
-        {tasks.length > 0 &&
-          tasks.filter((task) => statusFilter === 'ALL' || task.status === statusFilter).length === 0 && (
-            <p>No tasks match this filter.</p>
-          )}
+        {tasks.length > 0 && visibleTasks.length === 0 && <p>No tasks match this filter.</p>}
       </ul>
     </section>
   );
