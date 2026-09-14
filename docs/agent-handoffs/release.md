@@ -45,10 +45,14 @@ Deploy the Gate-2-approved Task Management feature to Vercel production, wire re
 
 ## Problems or Risks
 
-- **The Google OAuth redirect URI registered in Google Cloud Console still points at the wrong (predicted) domain.** Real Google sign-in will not work on the live site until this is corrected to `https://silver-octo-disco-bice.vercel.app/api/auth/callback/google`. This is a human action in Google Cloud Console — flagged, not performed by this agent.
-- **No real authenticated write/read has been proven through the live Vercel deployment itself.** The production database's schema and CRUD/IDOR behavior are proven real (via a local server pointed at the same database), and the live deployment's auth-gating is proven real, but the two haven't been proven together yet. Closing this needs either a completed real Google sign-in on the live site (once the redirect URI above is fixed) or explicit human authorization to seed-and-clean a throwaway row directly in production.
-- **The instructor has not yet been added as a Google OAuth test user.** Per `docs/REQUIRED-STACK.md`, required before the instructor can sign in for assessment — a human action in Google Cloud Console, not performed by this agent.
-- **`evidence/deployment.md`'s Final Status is marked FAIL**, not because the deployed code is broken, but because the two items above are genuinely still open. This should flip to PASS once they're closed, without needing to redo anything else in this handoff.
+All four items originally listed here are now resolved — recorded as history, not open risks:
+
+- ~~The Google OAuth redirect URI registered in Google Cloud Console still points at the wrong (predicted) domain.~~ **RESOLVED 2026-09-14 (Bravo):** corrected to `https://silver-octo-disco-bice.vercel.app/api/auth/callback/google` and independently re-verified against Google's real servers (see `evidence/deployment.md` Known Issue #3).
+- ~~No real authenticated write/read has been proven through the live Vercel deployment itself.~~ **RESOLVED 2026-09-14 (Bravo):** a real Google sign-in on the live site, plus a full live create → change status → delete → sign-out click-through, are both recorded in `evidence/deployment.md`'s Verification table and Known Issue #4.
+- ~~The instructor has not yet been added as a Google OAuth test user.~~ **RESOLVED 2026-09-14 (Bravo):** instructor's email added as a test user in Google Cloud Console → Audience → Test users; recorded in `evidence/deployment.md`'s Required Technology Verification section.
+- ~~`evidence/deployment.md`'s Final Status is marked FAIL.~~ **RESOLVED:** flipped to PASS once the three items above closed.
+
+One operational note carried forward (not a defect): local `.env`'s `DATABASE_URL` currently points at the same Neon database as Vercel production, so local testing writes directly to live data — see `evidence/deployment.md` Known Issue #4 for the fix (point local dev at the separate `silver_octo_disco_dev` container instead) if a safe local sandbox is wanted going forward.
 
 ## Next Agent
 
@@ -56,4 +60,4 @@ Lead Agent
 
 ## Required Action From Next Agent
 
-Confirm with Bravo (or do directly) the two remaining human actions: (1) fix the Google Console redirect URI to the real domain, (2) add the instructor as a Google OAuth test user. Then either have a human complete a real Google sign-in on the live site, or explicitly authorize a throwaway seed-and-cleanup verification pass against the production database, to close the one remaining "not yet verified" row in `evidence/deployment.md`. Once both are done, flip `evidence/deployment.md`'s Final Status to PASS and treat the deployment as fully verified.
+Deployment is fully verified — nothing further required from DevOps for this feature. Remaining project items are Alpha's (the architecture diagram's share URL) and, optionally, separating local dev's database from production per the note above.
