@@ -24,6 +24,7 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editError, setEditError] = useState<string | null>(null);
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,6 +104,7 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
     if (res.ok || res.status === 404) {
       setTasks((prev) => prev.filter((task) => task.id !== id));
     }
+    setConfirmingDeleteId(null);
   }
 
   return (
@@ -212,9 +214,21 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
                   Edit
                 </button>
               )}
-              <button type="button" onClick={() => handleDelete(task.id)}>
-                Delete
-              </button>
+              {confirmingDeleteId === task.id ? (
+                <>
+                  <span>Delete this task?</span>
+                  <button type="button" onClick={() => handleDelete(task.id)}>
+                    Yes, delete
+                  </button>
+                  <button type="button" onClick={() => setConfirmingDeleteId(null)}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button type="button" onClick={() => setConfirmingDeleteId(task.id)}>
+                  Delete
+                </button>
+              )}
             </div>
           </li>
         ))}
