@@ -47,6 +47,23 @@ test('GET only queries tasks scoped to the session user (ownership filter)', asy
   }
 });
 
+test('GET returns a structured 500 (not an unhandled crash) when Prisma throws', async () => {
+  setMockSession(makeSession('user-1'));
+  const restore = mockPrismaTask(prisma, {
+    findMany: async () => {
+      throw new Error('connection lost');
+    },
+  });
+  try {
+    const res = await GET();
+    assert.equal(res.status, 500);
+    const body = await res.json();
+    assert.equal(body.error, 'InternalError');
+  } finally {
+    restore();
+  }
+});
+
 test('POST returns 401 when there is no session (no Prisma call should happen)', async () => {
   setMockSession(null);
   let called = false;

@@ -161,6 +161,25 @@ test('PATCH /tasks/:id returns 404 (not 500) when zero rows match (missing or no
   }
 });
 
+test('PATCH /tasks/:id accepts an explicit null description and passes it straight through to clear the field', async () => {
+  setMockSession(makeSession('user-1'));
+  let updateArgs;
+  const restore = mockPrismaTask(prisma, {
+    updateMany: async (args) => {
+      updateArgs = args;
+      return { count: 1 };
+    },
+    findFirst: async () => ({ id: 't1', userId: 'user-1', description: null }),
+  });
+  try {
+    const res = await PATCH(patchRequest({ description: null }), ctx);
+    assert.equal(res.status, 200);
+    assert.equal(updateArgs.data.description, null);
+  } finally {
+    restore();
+  }
+});
+
 test('PATCH /tasks/:id returns a structured 500 (not an uncaught throw) when Prisma fails unexpectedly', async () => {
   // src/app/api/tasks/[id]/route.ts wraps the updateMany/findFirst pair in a
   // try/catch that returns internalErrorResponse() (src/lib/api-errors.ts)
