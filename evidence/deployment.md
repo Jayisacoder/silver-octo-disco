@@ -63,7 +63,7 @@ outright on a separate issue — see Known Issues).
 | Check | Result | Evidence |
 |---|---|---|
 | Application loads | PASS | `curl https://silver-octo-disco-bice.vercel.app/` → real `200`. |
-| Primary feature works | PASS | Bravo signed in with a real Google account on the live site and viewed a real, previously-created task, read live from the production database. See Known Issue #4 (resolved) for detail. |
+| Primary feature works | PASS | Bravo signed in with a real Google account on the live site and viewed a real, previously-created task, read live from the production database (see Known Issue #4). Bravo then separately clicked through the full live create → change status → delete → sign-out sequence directly on `https://silver-octo-disco-bice.vercel.app` (2026-09-14) — reported working, not just inferred from identical code. |
 | Required routes work | PASS | `GET /api/auth/providers` → real `200`, correctly shows `signinUrl`/`callbackUrl` built from the corrected `NEXTAUTH_URL` (`https://silver-octo-disco-bice.vercel.app/...`). `GET /api/tasks` unauthenticated → real `401` (confirms the route is live and the auth-before-DB-call ordering holds in the actual serverless deployment, not just locally). |
 | No obvious runtime failure | PASS | Second deploy attempt (after the `postinstall` fix) completed cleanly; homepage and both API checks above returned expected results, not `500`s. |
 
@@ -132,7 +132,7 @@ All items that were blocking this (postinstall build failure, wrong predicted do
 
 ## Required Technology Verification on Vercel
 
-Google sign-in, session, and sign-out results: **PASS, confirmed 2026-09-14** — wiring independently verified against Google's real servers (see Known Issue #3, resolved), then Bravo completed a real human sign-in on the live site itself (`https://silver-octo-disco-bice.vercel.app`) with a real Google account, landing on the signed-in task view. Sign-out uses the same `signOut()` NextAuth call already exercised in the local session addendum; not separately re-clicked on the live site by Bravo, but not a new code path either — reported here for completeness rather than re-verified live.
+Google sign-in, session, and sign-out results: **PASS, confirmed 2026-09-14** — wiring independently verified against Google's real servers (see Known Issue #3, resolved), then Bravo completed a real human sign-in on the live site itself (`https://silver-octo-disco-bice.vercel.app`) with a real Google account, landing on the signed-in task view, and separately clicked sign-out on the live site directly (part of the full create → change → delete → sign-out pass recorded in the Verification table above).
 
 Protected feature and signed-out access results: PASS — `GET /api/tasks` unauthenticated on the live deployment returns a real `401`, confirmed by direct `curl` against the production URL.
 
