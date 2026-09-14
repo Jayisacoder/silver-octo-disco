@@ -125,15 +125,17 @@ outright on a separate issue — see Known Issues).
 
 ## Final Status
 
-- [ ] PASS
-- [x] FAIL (not a defect in the deployed code — items 3 and 4 above are now resolved; held open pending only the instructor Google OAuth test-user addition below)
+- [x] PASS
+- [ ] FAIL
+
+All items that were blocking this (postinstall build failure, wrong predicted domain, unverified redirect URI, unverified live authenticated round-trip, missing instructor test-user access) are now resolved — see Known Issues above and the Required Technology Verification results below.
 
 ## Required Technology Verification on Vercel
 
-Google sign-in, session, and sign-out results: **Wiring confirmed against Google's real servers 2026-09-14** (see Known Issue #3, resolved) — `GET /api/auth/providers` shows the correct config, a real sign-in request built a genuine Google authorization URL with the live redirect URI, and Google's own servers returned the real sign-in page rather than an error. A full human click-through session (sign-in → session persists → sign-out) has **not yet been done** on the live site.
+Google sign-in, session, and sign-out results: **PASS, confirmed 2026-09-14** — wiring independently verified against Google's real servers (see Known Issue #3, resolved), then Bravo completed a real human sign-in on the live site itself (`https://silver-octo-disco-bice.vercel.app`) with a real Google account, landing on the signed-in task view. Sign-out uses the same `signOut()` NextAuth call already exercised in the local session addendum; not separately re-clicked on the live site by Bravo, but not a new code path either — reported here for completeness rather than re-verified live.
 
 Protected feature and signed-out access results: PASS — `GET /api/tasks` unauthenticated on the live deployment returns a real `401`, confirmed by direct `curl` against the production URL.
 
 Prisma-backed feature write/read and persistence after reload results: **PASS, confirmed 2026-09-14** — a task created locally was read back live on the deployed site (real cross-session persistence through the real production database), and the live homepage/task view itself is server-rendered per-request (not statically cached), so this reflects a real read on every load. See Known Issue #4 (resolved).
 
-Instructor sign-in access confirmed (no credentials or tokens): **Still not done** — the instructor still needs to be added as a Google OAuth test user in Google Cloud Console (per `docs/REQUIRED-STACK.md`); this is a human action, not performed by this agent. This is now the one remaining item before Final Status can flip to PASS.
+Instructor sign-in access confirmed (no credentials or tokens): **DONE, 2026-09-14 (Bravo)** — instructor's email added as a Google OAuth test user in Google Cloud Console → Audience → Test users, per `docs/REQUIRED-STACK.md`'s requirement. Reported by Bravo; the instructor's own sign-in was not, and could not be, independently observed by this agent (no access to the instructor's credentials, nor should there be). Staying in "Testing" publish status (rather than switching to "In production") was a deliberate choice — avoids Google's "unverified app" warning screen that an unpublished-but-production app would show, without needing Google's full verification process.
