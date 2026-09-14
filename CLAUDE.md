@@ -200,7 +200,7 @@ Requires Alpha and Bravo to review and approve feature scope, research findings,
 
 Requires Alpha and Bravo to review implementation, unit test results, independent QA results, the production build, and known limitations before the DevOps Agent may deploy.
 
-**Status: not yet approved.** Independent QA recommended READY for everything verifiable in the development sandbox (lint, typecheck, 47/47 tests, build all pass), but explicitly flagged that real end-to-end persistence, real cross-user IDOR against live rows, and real Google sign-in/sign-out have not been verified — no real database or Google OAuth credentials have been configured yet. That verification must happen before Gate 2 is granted.
+**Status: approved 2026-09-13 by Alpha and Bravo** (recorded in `evidence/validation.md`'s Gate 2 Approval section). All items originally blocking Gate 2 — real end-to-end persistence, real cross-user IDOR against live rows, real Google sign-in/sign-out/denied-sign-in — were closed with real-infrastructure verification before this approval. Deployment proceeding.
 
 ---
 

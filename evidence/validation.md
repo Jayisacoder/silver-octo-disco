@@ -138,6 +138,15 @@ Bravo independently ran an equivalent real-database verification pass in paralle
 
 **Now also closed:** the production redirect URI (`https://silver-octo-disco.vercel.app/api/auth/callback/google`) has been added to the same Google OAuth client (see `evidence/deployment.md`'s Pre-Deployment Preparation section) — this is a predicted domain, not yet confirmed against an actual deployment.
 
+## Gate 2 Approval — Production Deployment
+
+Per `CLAUDE.md` §10, Gate 2 requires Alpha and Bravo to review implementation, unit test results, independent QA results, the production build, and known limitations before the DevOps Agent may deploy. Basis for this review: the acceptance-criteria table above (all rows PASS, most now real-environment-verified against live rows, not mocks), `docs/agent-handoffs/qa.md`'s independent QA pass, 50+/50+ tests passing, a clean production build, and the two addenda closing the database/Google-OAuth-wiring/denied-sign-in gaps. Known, accepted limitations: no optimistic concurrency control (explicit MVP scope decision from Gate 1); the production domain (`https://silver-octo-disco.vercel.app`) is a prediction to be confirmed at first deploy, not yet independently verified the way the local redirect URI was.
+
+- **2026-09-13 — Alpha:** approval inferred from Alpha's own punch-list message directing deployment to proceed as its first step and treating "Gate 2 is recorded" as the closing formality once the two evidence files have real content — not a separate, literally-quoted "I approve" statement. Flagged here in the same spirit as the Gate 1 record's honesty about an informal approval, so this isn't overstated as more explicit than it was.
+- **2026-09-13 — Bravo (this session):** explicit approval, given directly in response to a summary of the acceptance criteria, test/QA/build results, and known limitations above.
+
+Both approvals recorded; Gate 2 is satisfied. Proceeding to deployment.
+
 ## Production Build
 
 Command:
