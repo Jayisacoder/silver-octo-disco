@@ -13,6 +13,7 @@
     "test:all": "python3 -B scripts/test-architecture.py && node --test scripts/test-commit-gate.mjs && npm run test:unit && npm test",
     "hooks:install": "node scripts/install-hooks.mjs",
     "check:commit": "node scripts/check-before-commit.mjs",
+    "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:db:push": "prisma db push",
     "prisma:studio": "prisma studio"
