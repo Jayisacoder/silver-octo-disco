@@ -1,5 +1,14 @@
 # Deployment Evidence
 
+## Pre-Deployment Preparation (Bravo, 2026-09-13)
+
+No deployment has happened yet — Gate 2 is not approved (see `CLAUDE.md` §10). This records prep work only, done ahead of that approval so the DevOps Agent can deploy immediately once both humans sign off.
+
+- Vercel project linked: `slumpshouses-projects/silver-octo-disco` (`npx vercel link`, project ID `prj_BW7UbPVVXyuECqPCpELLr07dZP57`), local `.vercel/` gitignored.
+- Production environment variables set in Vercel (`vercel env add ... production`, confirmed via `vercel env ls production`): `DATABASE_URL` (real, hosted Neon Postgres — already independently verified live in `evidence/validation.md`'s Database Agent Addendum), `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` (the same real credentials verified working in the Google OAuth Addendum), `NEXTAUTH_URL` (`https://silver-octo-disco.vercel.app` — **predicted, not yet confirmed**, since Vercel only finalizes the actual production domain at first deploy; per `docs/agent-handoffs/research.md`'s 2026-09-13 addendum, if the real domain differs, both this value and the Google Console redirect URI below must be updated together), a **freshly generated** `NEXTAUTH_SECRET`/`AUTH_SECRET` (distinct from the local dev `.env` value), `AUTH_TRUST_HOST=true`.
+- **Still outstanding before deploy is even possible end-to-end:** the production redirect URI (`https://silver-octo-disco.vercel.app/api/auth/callback/google`) still needs to be added to the same Google OAuth client in Google Cloud Console — that's a human action (Bravo), not done by this pass. If the real domain ends up different after first deploy, this must be redone with the correct domain.
+- **Not done, and must not be done until Gate 2:** no `vercel deploy`/`vercel --prod` has been run. This section will be replaced by real deployment results once Gate 2 is recorded.
+
 ## Deployment
 
 Date:
