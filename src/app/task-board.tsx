@@ -32,6 +32,20 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError(null);
+
+    if (title.trim() === '') {
+      setFormError('Title is required.');
+      return;
+    }
+    if (title.length > 200) {
+      setFormError('Title must be 200 characters or fewer.');
+      return;
+    }
+    if (description.length > 2000) {
+      setFormError('Description must be 2000 characters or fewer.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const res = await fetch('/api/tasks', {
