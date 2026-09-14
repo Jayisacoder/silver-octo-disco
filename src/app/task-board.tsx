@@ -20,6 +20,10 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
   const [priority, setPriority] = useState<(typeof PRIORITY_OPTIONS)[number]>('MEDIUM');
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editError, setEditError] = useState<string | null>(null);
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -52,7 +56,10 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
     }
   }
 
-  async function handleUpdate(id: string, changes: Partial<Pick<TaskDTO, 'status' | 'priority'>>) {
+  async function handleUpdate(
+    id: string,
+    changes: Partial<Pick<TaskDTO, 'status' | 'priority' | 'title' | 'description'>>,
+  ) {
     const res = await fetch(`/api/tasks/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -61,6 +68,33 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
     if (res.ok) {
       const data = (await res.json()) as { task: TaskDTO };
       setTasks((prev) => prev.map((task) => (task.id === id ? data.task : task)));
+      return true;
+    }
+    return false;
+  }
+
+  function startEdit(task: TaskDTO) {
+    setEditingId(task.id);
+    setEditTitle(task.title);
+    setEditDescription(task.description ?? '');
+    setEditError(null);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditError(null);
+  }
+
+  async function saveEdit(id: string) {
+    setEditError(null);
+    const ok = await handleUpdate(id, {
+      title: editTitle,
+      description: editDescription.trim() === '' ? null : editDescription,
+    });
+    if (ok) {
+      setEditingId(null);
+    } else {
+      setEditError('Could not save changes.');
     }
   }
 
@@ -112,8 +146,36 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
             key={task.id}
             style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '0.75rem', marginBottom: '0.5rem' }}
           >
-            <strong>{task.title}</strong>
-            {task.description && <p>{task.description}</p>}
+            {editingId === task.id ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <input
+                  value={editTitle}
+                  onChange={(event) => setEditTitle(event.target.value)}
+                  placeholder="Title"
+                  maxLength={200}
+                />
+                <textarea
+                  value={editDescription}
+                  onChange={(event) => setEditDescription(event.target.value)}
+                  placeholder="Description (optional)"
+                  maxLength={2000}
+                />
+                {editError && <p style={{ color: 'var(--error)' }}>{editError}</p>}
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button type="button" onClick={() => saveEdit(task.id)}>
+                    Save
+                  </button>
+                  <button type="button" onClick={cancelEdit}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <strong>{task.title}</strong>
+                {task.description && <p>{task.description}</p>}
+              </>
+            )}
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <label>
                 Status:{' '}
@@ -145,6 +207,11 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
                   ))}
                 </select>
               </label>
+              {editingId !== task.id && (
+                <button type="button" onClick={() => startEdit(task)}>
+                  Edit
+                </button>
+              )}
               <button type="button" onClick={() => handleDelete(task.id)}>
                 Delete
               </button>
