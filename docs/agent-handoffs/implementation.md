@@ -192,3 +192,54 @@ Unit Testing Agent / Test Agent, then Lead Agent.
 ## Required Action From Next Agent
 
 No behavior/API/schema changes occurred, so no new fixture or ownership/validation test coverage is needed. If the Unit Testing Agent wants optional coverage of `nextTheme`'s pure toggle logic, that's a small addition it owns under `tests/**` (out of this agent's boundary). Lead Agent: no re-approval of architecture or schema needed — this is a scoped, additive UI-only change (new CSS variables, one new client component, two color-value swaps) with all 52 pre-existing tests passing unmodified and `build`/`typecheck`/`lint` all green.
+
+---
+
+# 2026-09-14 Update: Force Google account chooser on every sign-in
+
+## Task
+
+Fix a live-deployment bug report: with an active Google session already present in the browser, clicking "Sign in with Google" silently re-authenticated with whatever Google account was currently active, never showing Google's account chooser. A user could not switch to a different Google account without first manually signing out of Google itself in a separate tab. Confirmed by live testing: app sign-out correctly ends the app session, but the next sign-in silently reuses the same Google account instead of prompting. Scoped as a minimal, one-line-ish config addition — no restructuring of `PrismaAdapter`, `session.strategy`, or the `session` callback.
+
+## Input Received
+
+- Direct read of `src/lib/auth.ts` before editing.
+- Instructed fix: add `authorization: { params: { prompt: 'select_account' } }` to the `GoogleProvider({...})` call so the OAuth authorization request always tells Google to show the account chooser.
+- Instructed boundary: `src/**` and this handoff only; do not touch `prisma/schema.prisma`, `tests/**`, or any other agent's handoff file.
+
+## Work Completed
+
+Added `authorization: { params: { prompt: 'select_account' } }` to the `GoogleProvider({...})` options object in `src/lib/auth.ts`, alongside the existing `clientId`/`clientSecret`. This is a NextAuth/OAuth request-parameter addition only: it changes what parameter the app sends Google in the authorization request URL (`prompt=select_account`), telling Google's authorization server to always render the account chooser rather than silently reusing an already-active Google session. Nothing else in the file was touched — `PrismaAdapter(prisma)`, `session: { strategy: 'database' }`, and the `session` callback (attaching `user.id`) remain exactly as they were.
+
+## Files Changed
+
+- `src/lib/auth.ts` (modified — added `authorization: { params: { prompt: 'select_account' } }` to the `GoogleProvider` call; added an explanatory comment above it).
+- `docs/agent-handoffs/implementation.md` (this update — appended, did not erase prior content).
+- Not modified: `prisma/schema.prisma`, `tests/**`, any other agent's handoff file, deployment configuration.
+
+## Decisions Made
+
+- **`prompt: 'select_account'` chosen over `prompt: 'consent'` or `prompt: 'consent select_account'`** — the bug report is specifically about the account chooser not appearing, not about re-consenting to scopes on every sign-in (which would also force a new consent screen and is a stronger, unrequested behavior change). `select_account` is the minimal fix for the reported symptom.
+- **No change to `PrismaAdapter`, `session.strategy`, or the `session` callback**, per the explicit instruction — this is purely an OAuth authorization-request parameter, unrelated to how the app establishes or reads its own session afterward.
+- **No new automated test authored.** This behavior is only observable against Google's real OAuth authorization endpoint (the actual rendering of the account chooser) and cannot be meaningfully exercised by `node --test` against this app's own code — there is no local seam that fakes Google's authorization server's prompt behavior. Inventing a fake test for it would test nothing real, so none was added, per explicit instruction.
+
+## Tests/Verification
+
+- `npm run typecheck` (`tsc --noEmit`) — clean, no errors.
+- `npm run lint` (`next lint`) — "No ESLint warnings or errors."
+- `npm run test:unit` (`node --test tests/**/*.test.mjs`) — `# tests 52 / # pass 52 / # fail 0 / # cancelled 0`, all pre-existing tests, unmodified, all still passing (this change doesn't touch any behavior those tests cover — only an OAuth request parameter).
+- `npm run build` (`next build`) — `✓ Compiled successfully`, `✓ Generating static pages (5/5)`, route table unchanged (`/api/auth/[...nextauth]` still `ƒ` dynamic, 0 B).
+- Did not attempt to verify the actual account-chooser prompt against live Google OAuth servers as part of this handoff (no real `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`/live browser session available in this pass) — this fix directly addresses the mechanism Google documents for this exact behavior (`prompt=select_account` in the authorization request), and per the task instructions, this can't be tested with `node --test` since it only matters against Google's real OAuth servers.
+
+## Problems or Risks
+
+- **Not exercised against live Google OAuth in this pass.** The Lead Agent or whoever next has access to a real deployment with live Google credentials should confirm, by testing in a browser with an active Google session, that Google's account chooser now appears on every "Sign in with Google" click, including immediately after an app sign-out.
+- **No other behavior changed.** `PrismaAdapter`, `session.strategy`, and the `session` callback are untouched; no schema, test, or other-agent file was modified.
+
+## Next Agent
+
+Lead Agent (for live-deployment verification of the account-chooser behavior).
+
+## Required Action From Next Agent
+
+Lead Agent: confirm via a real browser session with live Google OAuth credentials that clicking "Sign in with Google" now always shows Google's account chooser, including right after an app sign-out with the Google session still active in that browser. No re-approval of architecture or schema needed — this is a single OAuth request-parameter addition within the already-approved auth configuration, with `typecheck`/`lint`/`test:unit` (52/52)/`build` all green.

@@ -18,6 +18,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      // Always show Google's account chooser on sign-in, rather than silently
+      // re-authenticating with whichever Google account is already active in
+      // the browser. Without this, a user who wants to switch accounts must
+      // first sign out of Google itself in a separate tab (confirmed by live
+      // testing: app sign-out correctly ends the app session, but the next
+      // sign-in silently reuses the same Google account instead of prompting).
+      authorization: { params: { prompt: 'select_account' } },
     }),
   ],
   callbacks: {
