@@ -25,6 +25,7 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
   const [editDescription, setEditDescription] = useState('');
   const [editError, setEditError] = useState<string | null>(null);
   const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<(typeof STATUS_OPTIONS)[number] | 'ALL'>('ALL');
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -142,8 +143,24 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
         {formError && <p style={{ color: 'var(--error)' }}>{formError}</p>}
       </form>
 
+      <div role="group" aria-label="Filter by status" style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+        {(['ALL', ...STATUS_OPTIONS] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => setStatusFilter(option)}
+            aria-pressed={statusFilter === option}
+            style={statusFilter === option ? { fontWeight: 'bold' } : undefined}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {tasks.map((task) => (
+        {tasks
+          .filter((task) => statusFilter === 'ALL' || task.status === statusFilter)
+          .map((task) => (
           <li
             key={task.id}
             style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '0.75rem', marginBottom: '0.5rem' }}
@@ -233,6 +250,10 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
           </li>
         ))}
         {tasks.length === 0 && <p>No tasks yet.</p>}
+        {tasks.length > 0 &&
+          tasks.filter((task) => statusFilter === 'ALL' || task.status === statusFilter).length === 0 && (
+            <p>No tasks match this filter.</p>
+          )}
       </ul>
     </section>
   );
