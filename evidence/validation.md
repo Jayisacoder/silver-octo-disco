@@ -147,6 +147,8 @@ Per `CLAUDE.md` §10, Gate 2 requires Alpha and Bravo to review implementation, 
 
 Both approvals recorded; Gate 2 is satisfied. Proceeding to deployment.
 
+**Post-deployment correction (2026-09-13, Bravo):** the predicted domain above was wrong. The real assigned production domain is `https://silver-octo-disco-bice.vercel.app` (the plain `silver-octo-disco.vercel.app` name was apparently already taken elsewhere on Vercel). `NEXTAUTH_URL` was corrected and the app redeployed; the Google Console redirect URI still needs the same correction (see `evidence/deployment.md`'s Known Issues for full detail and remaining open items).
+
 ## Production Build
 
 Command:
