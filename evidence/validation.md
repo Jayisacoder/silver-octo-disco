@@ -134,7 +134,9 @@ Bravo independently ran an equivalent real-database verification pass in paralle
 
 **Real human sign-in — reported by Bravo (the learner), not independently observed by the agent:** Bravo ran `npm run dev` locally and personally clicked through the real Google consent screen with a real Google account; sign-in succeeded.
 
-**Still not exercised:** the "denied/failed sign-in" path (e.g. clicking "Deny" on Google's consent screen, or an expired/invalid session) — only the successful path has been confirmed. Also still open: the production redirect URI (`https://<vercel-domain>/api/auth/callback/google`) has not yet been added to the same Google OAuth client, since no Vercel domain exists yet.
+**Denied/failed sign-in — verified 2026-09-13 (Bravo):** rather than requiring a real click-through of Google's "Cancel" button, simulated exactly what Google sends back on denial — a redirect to this app's own registered callback with `error=access_denied` (`GET /api/auth/callback/google?error=access_denied&state=...`) — against the real running app (real NextAuth code, no mocks). Result: a clean `302` to `/api/auth/error?error=Callback`, which itself redirects to `/api/auth/signin?error=Callback`, rendering a normal `200` page. No crash, no `500`, no unhandled exception — the app fails gracefully and returns the user to sign-in with an error state, exactly as required by `docs/agent-handoffs/research.md`'s original spec ("Failed or denied Google sign-in will return an error state and keep the user signed out").
+
+**Now also closed:** the production redirect URI (`https://silver-octo-disco.vercel.app/api/auth/callback/google`) has been added to the same Google OAuth client (see `evidence/deployment.md`'s Pre-Deployment Preparation section) — this is a predicted domain, not yet confirmed against an actual deployment.
 
 ## Production Build
 
