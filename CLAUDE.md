@@ -184,7 +184,7 @@ Failures found by the Test Agent go back to the Lead Agent, which routes the fix
 
 # 9. Reusable Skill
 
-Not yet created. A Skill encoding the standard agent handoff format (read task → do bounded work → run relevant tests → write the `docs/agent-handoffs/*.md` handoff in the required template → report to the Lead Agent) is the leading candidate, since every agent in this workflow repeats that exact procedure. To be added under `.claude/skills/jayisacoder-<purpose>/SKILL.md`.
+Created: `.claude/skills/jayisacoder-agent-handoff/SKILL.md` (Skill name `jayisacoder-agent-handoff`). Encodes the standard agent handoff procedure — verify the work with real command output, confirm the agent stayed inside its declared file boundary, write the `docs/agent-handoffs/*.md` handoff in the required template with a specific next agent and required action, then report back to the Lead Agent. Every specialized agent (Research, Database, Developer, Unit Testing, Test, DevOps) uses it after finishing delegated work, since they all repeat this exact procedure regardless of what the task was — it is a Skill rather than a one-off prompt because it is invoked repeatedly across different tasks and agents with a fixed, checkable completion condition, not a single instruction used once.
 
 ---
 

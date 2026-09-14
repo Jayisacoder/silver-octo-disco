@@ -188,3 +188,88 @@ Lead Agent
 ## Required Action From Next Agent
 
 Present this research handoff to Alpha and Bravo for Gate 1 review and approval — specifically the Task/User/Account/Session schema shape, the Route Handlers vs. Server Actions decision, the ownership/IDOR enforcement pattern, the validation approach, and the seeded-session-cookie testing strategy. Do not begin database, implementation, unit-testing, or deployment work until that explicit, dated Gate 1 approval is recorded in `evidence/validation.md`.
+
+---
+
+# 2026-09-13 Addendum: Google OAuth redirect URI / authorized origin configuration
+
+## Task
+
+Research and document exactly what Google OAuth redirect URI / authorized origin configuration this project's NextAuth v4 setup needs, for both local development and a Vercel production deployment, so Bravo (who is setting up the real Google Cloud Console OAuth client) has the exact values to register. Research only — no code, schema, or config changes made.
+
+## Input Received
+
+- Scoped by the Lead Agent: confirm the exact route path this app actually uses (don't assume), then give Bravo concrete redirect URI / origin / `NEXTAUTH_URL` values for local dev and Vercel production, confirm whether one Google OAuth client can hold both, and flag the `NEXTAUTH_URL`-vs-registered-redirect-URI mismatch failure mode.
+- Existing repo state consulted: `src/lib/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `package.json`, `.env.example`, `docs/REQUIRED-STACK.md`, and the prior Gate-1-approved research above (which already established the route location and `session: { strategy: "database" }`).
+
+## Work Completed
+
+- Read `src/app/api/auth/[...nextauth]/route.ts`: it calls `NextAuth(authOptions)` and exports the result as both `GET` and `POST`. Under Next.js App Router file-based routing, a route handler at `src/app/api/auth/[...nextauth]/route.ts` serves every path under `/api/auth/*` — this is the actual mount point, not an assumption.
+- Read `src/lib/auth.ts`: `authOptions.providers` contains exactly one provider, `GoogleProvider({ clientId: process.env.GOOGLE_CLIENT_ID ?? '', clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '' })`. NextAuth v4's provider id for `next-auth/providers/google` is `google`.
+- Read `package.json`: confirmed installed version is `"next-auth": "^4.24.7"` — genuinely v4 (Auth.js/NextAuth v5's different route/callback conventions do not apply here).
+- Read `.env.example`: `NEXTAUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXTAUTH_SECRET`, `AUTH_SECRET`, and `AUTH_TRUST_HOST` are already documented as expected variable names (values blank, as required — no secrets committed).
+- Cross-checked NextAuth v4's documented callback URL convention (`/api/auth/callback/:provider`, mounted wherever the catch-all `[...nextauth]` route lives) against the confirmed mount point above: for this repo, provider id `google`, that resolves to `/api/auth/callback/google` off whatever origin `NEXTAUTH_URL` is set to.
+
+## Files Changed
+
+- `docs/agent-handoffs/research.md` (this addendum only, appended below the existing Gate-1-approved content, which was not altered or removed).
+- No application code, schema, config, or `.env.example` was modified — read-only research per this agent's boundary.
+
+## Decisions Made / Findings
+
+### 1. Exact redirect URI values for Bravo to register
+
+Because the catch-all route lives at `src/app/api/auth/[...nextauth]/route.ts` and the only configured provider id is `google`, NextAuth v4 always builds the callback URL as `<NEXTAUTH_URL origin>/api/auth/callback/google`. Concretely, in Google Cloud Console → Credentials → the OAuth 2.0 Client ID → **Authorized redirect URIs**, register:
+
+- **Local development:** `http://localhost:3000/api/auth/callback/google`
+  (assumes the default Next.js dev port 3000, i.e. `npm run dev` with no `-p` override, matching `NEXTAUTH_URL=http://localhost:3000` in local `.env`.)
+- **Vercel production:** `https://<your-vercel-domain>/api/auth/callback/google`
+  Substitute `<your-vercel-domain>` with whatever the real deployed domain is once it exists — either the auto-generated `*.vercel.app` domain Vercel assigns the project, or a custom domain if one is attached. This must be typed in **after** the Vercel deployment exists and its domain is known, then registered as a second URI on the same client (see §3). If Vercel preview deployments (unique URL per PR/branch) also need to complete a real Google sign-in during review, each preview's unique domain would need its own registered redirect URI too, since Google matches redirect URIs by exact string, not by wildcard/pattern — flagged as a decision for Alpha/Bravo, not resolved here (a common workaround is to only exercise Google sign-in against Preview branch domains that are pinned, or to rely on the seeded-session-cookie test strategy from the Gate-1 research above for anything that doesn't need a real Google round trip).
+
+### 2. `NEXTAUTH_URL` value per environment, and why mismatches break OAuth
+
+- **Local:** `NEXTAUTH_URL=http://localhost:3000`
+- **Vercel production:** `NEXTAUTH_URL=https://<your-vercel-domain>` — the exact same origin used in the registered redirect URI above (scheme + host, no trailing slash, no path).
+
+NextAuth v4 does not discover its own public URL reliably from the incoming request in every deployment configuration — it uses `NEXTAUTH_URL` (falling back to `VERCEL_URL`-derived detection in some cases, which is not guaranteed to match a custom domain) to build the redirect URI it sends to Google as part of the OAuth `redirect_uri` parameter. Google's OAuth server then rejects the callback with `redirect_uri_mismatch` unless the exact string NextAuth constructs (`<NEXTAUTH_URL>/api/auth/callback/google`) is byte-for-byte one of the URIs registered on the Google client (scheme, host, port, and path all matter — `http` vs `https`, a missing/extra trailing slash, or the wrong port all count as a mismatch). This is why `NEXTAUTH_URL` being unset, stale, or pointed at the wrong origin (e.g. left as the local value in a Vercel environment, or pointed at a preview URL that doesn't match the registered one) is the most common cause of Google OAuth failing in an otherwise-correct setup — the failure surfaces as a redirect to Google's own error page, not a NextAuth application error, which is why it's easy to misdiagnose as a code bug. Bravo should set `NEXTAUTH_URL` as a Vercel project environment variable (Production, and Preview if preview-domain sign-in is needed) pointed at the real deployed origin, not left blank or copied from `.env.example`.
+
+### 3. One Google OAuth client can hold both URIs — no need for two apps
+
+Yes — a single Google OAuth 2.0 Client ID's **Authorized redirect URIs** field accepts multiple entries. Bravo can add both:
+```
+http://localhost:3000/api/auth/callback/google
+https://<your-vercel-domain>/api/auth/callback/google
+```
+on the same client, and NextAuth will simply present whichever one matches the `NEXTAUTH_URL` active in that running environment. There is no need to create a second Google Cloud OAuth client/app for production — only a second entry on the existing client's redirect URI list (plus, per §1, an additional entry for any preview domain that needs real Google sign-in).
+
+### 4. Authorized JavaScript origins
+
+Google Cloud Console's OAuth client form also has a separate **Authorized JavaScript origins** field (distinct from redirect URIs — origins only, no path). Because NextAuth v4's Google provider uses the standard server-side OAuth authorization-code flow (a full-page redirect to Google and back to the `/api/auth/callback/google` route handler, not a client-side/implicit `google.accounts.id` JS SDK flow), Authorized JavaScript origins are not strictly required for this flow to function — Google's own console UI treats the field as optional for this OAuth client type when only server-side redirect flow is used. That said, it is low-cost and commonly done defensively to register the same origins as JavaScript origins (without the path):
+```
+http://localhost:3000
+https://<your-vercel-domain>
+```
+so that if any future feature adds a client-side Google Identity Services button/prompt, the origins are already registered rather than needing a second round-trip through Console.
+
+## Tests/Verification
+
+Research-only work — nothing to execute. Verification performed by cross-checking the recommendation against actual repo state rather than assumed defaults:
+- Confirmed route mount point by reading `src/app/api/auth/[...nextauth]/route.ts` directly (catch-all under `src/app/api/auth/`, handler built from `NextAuth(authOptions)`), rather than assuming a conventional path.
+- Confirmed installed `next-auth` major version is 4 (`"^4.24.7"` in `package.json`), not 5 — v4's `/api/auth/callback/:provider` convention was used, not v5/Auth.js conventions, which differ.
+- Confirmed the only configured provider id is `google` by reading `authOptions.providers` in `src/lib/auth.ts` directly.
+- Confirmed `NEXTAUTH_URL` is already the expected env var name for this project by reading `.env.example`, rather than guessing a variable name.
+
+## Problems or Risks
+
+- **The real Vercel domain does not exist yet.** This handoff gives the exact pattern and substitution rule, not a literal final URL — Bravo (or whoever completes the Vercel deployment) must fill in `<your-vercel-domain>` once Vercel assigns/attaches it, and update both the Google Console redirect URI and the Vercel `NEXTAUTH_URL` environment variable to match, in the same commit/change so they can't drift apart.
+- **Preview deployments are an open question, not resolved here.** If Alpha/Bravo want a real interactive Google sign-in to work against Vercel Preview URLs (which change per branch/PR), each such URL needs its own registered redirect URI, which doesn't scale to arbitrary preview URLs. This should be decided explicitly (e.g., "Preview environments rely on the seeded-session-cookie test strategy and never exercise real Google sign-in") rather than assumed.
+- **Local dev port assumption.** The `http://localhost:3000` value assumes `next dev`'s default port; if a learner's machine runs the dev server on a different port (e.g., 3000 already in use), both `NEXTAUTH_URL` and the registered local redirect URI must be updated together to match the actual port in use.
+- **`NEXTAUTH_SECRET`/`AUTH_SECRET` and `AUTH_TRUST_HOST` are out of scope for this addendum** (already listed in `.env.example`, not part of the redirect-URI/origin question asked) — flagged only so Bravo doesn't assume this addendum covers all NextAuth environment configuration; it covers redirect URI/origin/`NEXTAUTH_URL` specifically.
+
+## Next Agent
+
+Lead Agent
+
+## Required Action From Next Agent
+
+Hand this addendum to Bravo for the actual Google Cloud Console OAuth client registration: add both redirect URIs (§1) to the existing/new Google OAuth client, set `NEXTAUTH_URL` correctly in each environment (§2) — including as a real Vercel project environment variable once the Vercel domain is known — confirm a single client covers both environments (§3), and optionally register the matching Authorized JavaScript origins (§4). Bravo should also get an explicit decision from Alpha on the open preview-deployment question flagged above before assuming preview URLs need their own registered redirect URIs.
