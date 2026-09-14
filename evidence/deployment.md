@@ -85,15 +85,19 @@ outright on a separate issue — see Known Issues).
    (e.g. a custom domain gets attached later), NEXTAUTH_URL and the
    Google Console redirect URI both need updating again together.
 
-3. The Google OAuth redirect URI registered in Google Cloud Console
-   still points at the WRONG predicted domain
-   (https://silver-octo-disco.vercel.app/api/auth/callback/google).
-   This must be corrected to
-   https://silver-octo-disco-bice.vercel.app/api/auth/callback/google
-   before real Google sign-in will work on the live site — this is a
-   human action in Google Cloud Console, not something this agent can
-   do. Real sign-in against the live deployment has NOT been tested yet
-   for this reason.
+3. RESOLVED 2026-09-14 (Bravo): the Google OAuth redirect URI in Google
+   Cloud Console was corrected to the real domain
+   (https://silver-octo-disco-bice.vercel.app/api/auth/callback/google).
+   Independently verified against Google's own servers (not just taken
+   on Bravo's word): fetched a real CSRF token from the live deployment,
+   POSTed a real sign-in request to /api/auth/signin/google, got back a
+   genuine accounts.google.com authorization URL built with the live
+   redirect_uri, then fetched that exact URL — HTTP 200, real "Sign in -
+   Google Accounts" page, zero matches for redirect_uri_mismatch/
+   invalid_client/deleted_client/"Access blocked". A full human
+   click-through login still hasn't happened (see item 4), but the
+   wiring itself is now confirmed correct end-to-end against the live
+   deployment.
 
 4. A live, real create/read/update/delete round trip against the
    production database THROUGH the deployed app was not performed by
@@ -122,7 +126,7 @@ outright on a separate issue — see Known Issues).
 
 ## Required Technology Verification on Vercel
 
-Google sign-in, session, and sign-out results: **Not yet tested against the live deployment** — blocked on Known Issue #3 (wrong redirect URI still registered). `GET /api/auth/providers` confirms the provider config itself is correctly wired with the real live domain.
+Google sign-in, session, and sign-out results: **Wiring confirmed against Google's real servers 2026-09-14** (see Known Issue #3, resolved) — `GET /api/auth/providers` shows the correct config, a real sign-in request built a genuine Google authorization URL with the live redirect URI, and Google's own servers returned the real sign-in page rather than an error. A full human click-through session (sign-in → session persists → sign-out) has **not yet been done** on the live site.
 
 Protected feature and signed-out access results: PASS — `GET /api/tasks` unauthenticated on the live deployment returns a real `401`, confirmed by direct `curl` against the production URL.
 
