@@ -103,14 +103,14 @@ export function TaskBoard({ initialTasks }: { initialTasks: TaskDTO[] }) {
         <button type="submit" disabled={isSubmitting}>
           Add task
         </button>
-        {formError && <p style={{ color: 'crimson' }}>{formError}</p>}
+        {formError && <p style={{ color: 'var(--error)' }}>{formError}</p>}
       </form>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {tasks.map((task) => (
           <li
             key={task.id}
-            style={{ border: '1px solid #cbd5e1', borderRadius: 6, padding: '0.75rem', marginBottom: '0.5rem' }}
+            style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '0.75rem', marginBottom: '0.5rem' }}
           >
             <strong>{task.title}</strong>
             {task.description && <p>{task.description}</p>}

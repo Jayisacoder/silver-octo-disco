@@ -133,3 +133,62 @@ Unit Testing Agent (for the two recommended new tests above), then Lead Agent.
 ## Required Action From Next Agent
 
 Unit Testing Agent: add focused coverage for (1) a Prisma-throws-during-a-handler-call path returning the new `{ error: 'InternalError' }`/500 shape, and (2) `updateTaskSchema` accepting `description: null` while `createTaskSchema` still rejects it. Neither is a blocker for Gate 2 — these are optional-but-recommended additions closing out QA's two non-blocking findings. Lead Agent: no re-approval of architecture or schema needed: this is an implementation-only fix within the already-approved feature, no `prisma/schema.prisma` or route contract change (the 500 shape is new but was already the intended contract per the original error-handling design; the `PATCH` request/response shape for `description` is unchanged, only the previously-rejected `null` input is now accepted).
+
+---
+
+# 2026-09-14 Update: Dark mode support (UI-only, no behavior change)
+
+## Task
+
+Add dark mode support to the UI: a light/dark CSS custom-property palette that also respects the OS `prefers-color-scheme` when the user hasn't chosen explicitly, plus a small persistent toggle. Explicitly scoped as UI-only/styling-only — no change to `prisma/schema.prisma`, API route logic, `tests/**`, or any other agent's handoff file.
+
+## Input Received
+
+- Direct read of `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/task-board.tsx`, `src/app/auth-buttons.tsx` before editing.
+- Instructed boundary: `src/**` and this handoff only; color-only swap of existing inline styles, no layout/spacing changes, no new dependencies, no blocking inline-script FOUC prevention.
+
+## Work Completed
+
+1. **CSS custom properties in `globals.css`.** Added a `:root` light palette (`--bg`, `--fg`, `--border`, `--muted`, `--error`) matching the values already hardcoded elsewhere in the app (`#f8fafc`, `#0f172a`, `#cbd5e1`, `crimson`). Added a dark override under `:root[data-theme='dark']` (explicit user choice) and an identical dark override under `@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { ... } }` (automatic OS-preference fallback when no explicit choice has been made). Updated the `html, body` rule to use `var(--bg)`/`var(--fg)` instead of the hardcoded hex values.
+2. **Swapped hardcoded colors for variables.** `src/app/task-board.tsx`: the task-list item `border: '1px solid #cbd5e1'` became `border: '1px solid var(--border)'`; the form-error `color: 'crimson'` became `color: 'var(--error)'`. `src/app/page.tsx` was re-checked and has no hardcoded color values in its inline styles (only layout/spacing/`fontFamily`), so no change was needed there. All other inline styles (padding, gap, flex, maxWidth, etc.) were left exactly as-is in both files — this was a color-only swap, not a redesign.
+3. **New `src/app/theme-toggle.tsx` client component.** A fixed-position button that reads `localStorage['theme']` on mount and, if a saved `'light'`/`'dark'` value exists, applies it via `document.documentElement.setAttribute('data-theme', ...)`. If nothing is saved, it leaves `data-theme` unset (so the `prefers-color-scheme` media query in `globals.css` keeps controlling appearance automatically) and only uses the OS preference to decide the button's own initial label. Clicking the button toggles between `'light'`/`'dark'`, sets the `data-theme` attribute, and persists the explicit choice to `localStorage`. `localStorage` reads/writes are wrapped in `try/catch` (e.g. private browsing can throw). Exports a small pure helper, `nextTheme(current)`, that flips `'light' | 'dark'` — kept separate from the component so the toggle logic itself is trivially testable without rendering React.
+4. **Wired into `src/app/layout.tsx`.** Added `<ThemeToggle />` inside `<body>`, alongside (not inside) `<Providers>`, so the toggle renders on every page regardless of sign-in state. No other change to `layout.tsx`.
+5. Per the task's explicit instruction, did not add any blocking inline `<script>` FOUC-prevention trick and did not add any new dependency — a brief flash of the wrong theme on first load is accepted as in-scope for this project's size. Also did not add a test under `tests/**`: the task's own boundary instructions list `tests/**` as off-limits for this change, so the optional "tiny pure-logic unit test" suggestion in the task brief was not taken, in favor of respecting the stricter explicit boundary.
+
+## Files Changed
+
+- `src/app/globals.css` (modified — added `:root` / `:root[data-theme='dark']` / `prefers-color-scheme` variable blocks; `html, body` now uses `var(--bg)`/`var(--fg)`).
+- `src/app/task-board.tsx` (modified — two inline color values replaced with `var(--border)`/`var(--error)`; no other change).
+- `src/app/theme-toggle.tsx` (new — toggle button component + `nextTheme` helper).
+- `src/app/layout.tsx` (modified — renders `<ThemeToggle />` in `<body>`).
+- `src/app/page.tsx` — reviewed, no change needed (no hardcoded colors present).
+- `docs/agent-handoffs/implementation.md` (this update — appended, did not erase prior content).
+- Not modified: `prisma/schema.prisma`, API route logic, `tests/**`, `src/app/auth-buttons.tsx` (no colors to change), any other agent's handoff file, deployment configuration.
+
+## Decisions Made
+
+- **Five CSS variables, matching exactly what the existing inline styles already hardcoded** (`--bg`, `--fg`, `--border`, `--error`, plus `--muted` reserved for any future muted-text use) rather than a larger design-token system — proportionate to a class project's internal tool.
+- **Both an explicit `data-theme` attribute path and a `prefers-color-scheme` media-query path**, as required: `:root[data-theme='dark']` wins when the user has clicked the toggle; the media query (`guarded` with `:not([data-theme='light'])`) governs automatically otherwise, so a user who never touches the toggle still gets correct system-driven theming.
+- **`nextTheme` extracted as a standalone pure function** in the same file, purely so the flip logic is inspectable/reasoned-about independently of the component, without introducing a test file (respecting the `tests/**` boundary in this task's instructions).
+- **Toggle rendered outside `<Providers>` in `layout.tsx`** — it has no dependency on the NextAuth session, and the task explicitly required it to work regardless of sign-in state.
+
+## Tests/Verification
+
+- `npm run typecheck` (`tsc --noEmit`) — clean, no errors.
+- `npm run lint` (`next lint`) — "No ESLint warnings or errors."
+- `npm run test:unit` (`node --test tests/**/*.test.mjs`) — `# tests 52 / # pass 52 / # fail 0 / # cancelled 0`, all pre-existing tests, unmodified, all still passing.
+- `npm run build` (`next build`) — `✓ Compiled successfully`, `✓ Generating static pages (5/5)`, route table unchanged from the prior handoff entry.
+- No new automated test was added (see Decisions Made / Work Completed item 5) — this is a UI-only styling change with no server-side/API behavior to unit test, and the repo has no browser/rendering test infra to exercise the toggle's DOM effects.
+
+## Problems or Risks
+
+- **A brief flash of the wrong theme on first load is possible** (e.g. OS is dark, user previously chose light, page paints with the media-query dark colors for one frame before the `useEffect` in `ThemeToggle` applies `data-theme="light"`). Explicitly accepted as in-scope per the task's instructions; no inline blocking script was added to avoid it.
+- **No automated coverage of the toggle's actual DOM/localStorage behavior** — only `tsc`/lint/build were used to verify it compiles and doesn't break existing tests; manual/browser verification of the toggle's visual behavior was not performed as part of this handoff.
+
+## Next Agent
+
+Unit Testing Agent / Test Agent, then Lead Agent.
+
+## Required Action From Next Agent
+
+No behavior/API/schema changes occurred, so no new fixture or ownership/validation test coverage is needed. If the Unit Testing Agent wants optional coverage of `nextTheme`'s pure toggle logic, that's a small addition it owns under `tests/**` (out of this agent's boundary). Lead Agent: no re-approval of architecture or schema needed — this is a scoped, additive UI-only change (new CSS variables, one new client component, two color-value swaps) with all 52 pre-existing tests passing unmodified and `build`/`typecheck`/`lint` all green.
