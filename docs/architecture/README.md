@@ -2,7 +2,7 @@
 
 Complete this document and commit your diagram export before submitting your project for assessment. The starter intentionally leaves the evidence fields empty.
 
-Diagram URL: PENDING — needs a real Excalidraw/Figma/diagrams.net share link (see note below); browser automation could not obtain one in this environment
+Diagram URL: https://excalidraw.com/#json=3EEcv8QCQf_9XS5VNGKdL,iyl_0yyv3aSKlr6sVUIBIA
 Diagram export: docs/architecture/system-architecture.svg
 
 Use a specific HTTPS share link from Figma, FigJam, Excalidraw, diagrams.net, or an equivalent diagram tool. Give the instructor view access and verify that the shared link opens for them. A tool homepage or a local browser session is not a diagram share link.
