@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 -20 3300 3300" width="3300" height="3300">
+<rect x="20" y="-20" width="3300" height="3300" fill="#ffffff"/>
+<defs><marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" /></marker></defs>
+<text x="60" y="44" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1e1e1e" text-anchor="start"><tspan x="60" dy="0">System Architecture — AI Software Development Team (jayisacoder) — Task Management Feature</tspan></text>
+<text x="60" y="68" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#495057" text-anchor="start"><tspan x="60" dy="0">Alpha owns: jayisacoder-lead / -research / -test.   Bravo owns: jayisacoder-database / -developer / -unit-testing / -devops.</tspan></text>
+<text x="60" y="114" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#343a40" text-anchor="start"><tspan x="60" dy="0">A. Application Architecture</tspan></text>
+<rect x="60" y="140" width="200" height="80" rx="8" fill="#e9ecef" fill-opacity="1" stroke="#495057" stroke-width="2" />
+<text x="160" y="176.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#495057" text-anchor="middle"><tspan x="160" dy="0">User</tspan><tspan x="160" dy="18.75">(Browser)</tspan></text>
+<rect x="340" y="140" width="220" height="80" rx="8" fill="#b2f2bb" fill-opacity="1" stroke="#2f9e44" stroke-width="2" />
+<text x="450" y="176.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#2f9e44" text-anchor="middle"><tspan x="450" dy="0">Google OAuth</tspan><tspan x="450" dy="18.75">(Sign-in / OpenID Connect)</tspan></text>
+<rect x="700" y="140" width="240" height="80" rx="8" fill="#b2f2bb" fill-opacity="1" stroke="#2f9e44" stroke-width="2" />
+<text x="820" y="169.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#2f9e44" text-anchor="middle"><tspan x="820" dy="0">NextAuth Session</tspan><tspan x="820" dy="15">(App / Session Boundary)</tspan><tspan x="820" dy="15">session: "database" strategy</tspan></text>
+<rect x="1120" y="140" width="260" height="80" rx="8" fill="#b2f2bb" fill-opacity="1" stroke="#2f9e44" stroke-width="2" />
+<text x="1250" y="169.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#2f9e44" text-anchor="middle"><tspan x="1250" dy="0">Next.js Route Handlers</tspan><tspan x="1250" dy="15">GET/POST /api/tasks</tspan><tspan x="1250" dy="15">GET/PATCH/DELETE /api/tasks/:id</tspan></text>
+<rect x="1120" y="300" width="260" height="90" rx="8" fill="#b2f2bb" fill-opacity="1" stroke="#2f9e44" stroke-width="2" />
+<text x="1250" y="334.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#2f9e44" text-anchor="middle"><tspan x="1250" dy="0">Prisma Client</tspan><tspan x="1250" dy="15">ownership filter { id, userId }</tspan><tspan x="1250" dy="15">in ONE query — never fetch-then-check</tspan></text>
+<rect x="1120" y="460" width="260" height="110" rx="8" fill="#e9ecef" fill-opacity="1" stroke="#495057" stroke-width="2" />
+<text x="1250" y="497" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#495057" text-anchor="middle"><tspan x="1250" dy="0">PostgreSQL</tspan><tspan x="1250" dy="15">Task (status/priority enums)</tspan><tspan x="1250" dy="15">User · Account · Session</tspan><tspan x="1250" dy="15">VerificationToken</tspan></text>
+<rect x="340" y="300" width="340" height="130" rx="8" fill="#ffd8a8" fill-opacity="1" stroke="#e8590c" stroke-width="2" />
+<text x="510" y="341.625" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#e8590c" text-anchor="middle"><tspan x="510" dy="0">Vercel</tspan><tspan x="510" dy="13.75">Production hosting for the</tspan><tspan x="510" dy="13.75">Next.js app + API routes</tspan><tspan x="510" dy="13.75">(env vars: DATABASE_URL,</tspan><tspan x="510" dy="13.75">GOOGLE_CLIENT_ID/SECRET, NEXTAUTH_SECRET)</tspan></text>
+<text x="1400" y="166" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#c92a2a" text-anchor="start"><tspan x="1400" dy="0">IDOR defense: a task that</tspan><tspan x="1400" dy="13.75">doesn't exist and a task</tspan><tspan x="1400" dy="13.75">owned by another user both</tspan><tspan x="1400" dy="13.75">return the SAME 404 (never 403)</tspan></text>
+<rect x="60" y="470" width="480" height="150" rx="8" fill="#fff0f6" fill-opacity="1" stroke="#c2255c" stroke-width="2" />
+<text x="68" y="504.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c2255c" text-anchor="start"><tspan x="68" dy="0">User Persona: "Alex"</tspan><tspan x="68" dy="15"></tspan><tspan x="68" dy="15">An individual tracking personal tasks alone —</tspan><tspan x="68" dy="15">not a team or project-management tool.</tspan><tspan x="68" dy="15">Goal: quickly create, prioritize, and complete</tspan><tspan x="68" dy="15">personal to-dos, and trust that only they can</tspan><tspan x="68" dy="15">see or change their own tasks.</tspan></text>
+<polyline points="300,470 160,220" fill="none" stroke="#c2255c" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="228.9" y="340" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#c2255c" text-anchor="middle"><tspan x="228.9" dy="0">represents</tspan></text>
+<polyline points="260,180 340,180" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="298.9" y="175" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1e1e1e" text-anchor="middle"><tspan x="298.9" dy="0">1. sign in</tspan></text>
+<polyline points="560,180 700,180" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="628.9" y="175" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1e1e1e" text-anchor="middle"><tspan x="628.9" dy="0">2. session</tspan></text>
+<polyline points="940,180 1120,180" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1028.57" y="175" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1e1e1e" text-anchor="middle"><tspan x="1028.57" dy="0">3. auth check</tspan></text>
+<polyline points="1250,220 1250,300" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1247.8" y="255" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1e1e1e" text-anchor="middle"><tspan x="1247.8" dy="0">4. server-side query</tspan></text>
+<polyline points="1250,390 1250,460" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1248.35" y="420" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1e1e1e" text-anchor="middle"><tspan x="1248.35" dy="0">5. read / write</tspan></text>
+<polyline points="1360,220 1360,280 510,280 510,300" fill="none" stroke="#e8590c" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="933.7900000000001" y="275" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#e8590c" text-anchor="middle"><tspan x="933.7900000000001" dy="0">deployed on</tspan></text>
+<text x="60" y="639" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#343a40" text-anchor="start"><tspan x="60" dy="0">B. Agent Workflow &amp; Delegation — divided by who owns each agent</tspan></text>
+<rect x="240" y="1010" width="420" height="1340" rx="8" fill="#e7f5ff" fill-opacity="0.3" stroke="#74c0fc" stroke-width="2" stroke-dasharray="8,6" />
+<text x="260" y="1036" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#1971c2" text-anchor="start"><tspan x="260" dy="0">ALPHA</tspan><tspan x="260" dy="20">Lead · Research · Independent QA</tspan></text>
+<rect x="690" y="660" width="420" height="2230" rx="8" fill="#f8f9fa" fill-opacity="0.3" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,6" />
+<text x="710" y="686" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#495057" text-anchor="start"><tspan x="710" dy="0">SHARED</tspan><tspan x="710" dy="20">Human approval &amp; deployment target</tspan></text>
+<rect x="1140" y="1550" width="420" height="1160" rx="8" fill="#e6fcf5" fill-opacity="0.3" stroke="#38d9a9" stroke-width="2" stroke-dasharray="8,6" />
+<text x="1160" y="1576" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#0ca678" text-anchor="start"><tspan x="1160" dy="0">BRAVO</tspan><tspan x="1160" dy="20">Database · Developer · Unit Testing · DevOps</tspan></text>
+<rect x="750" y="800" width="300" height="80" rx="8" fill="#ffec99" fill-opacity="1" stroke="#f08c00" stroke-width="2" />
+<text x="900" y="836.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#f08c00" text-anchor="middle"><tspan x="900" dy="0">Alpha + Bravo</tspan><tspan x="900" dy="18.75">(Human Developers)</tspan></text>
+<rect x="750" y="980" width="300" height="70" rx="8" fill="#e9ecef" fill-opacity="1" stroke="#495057" stroke-width="2" />
+<text x="900" y="1020.625" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#495057" text-anchor="middle"><tspan x="900" dy="0">Feature Request</tspan></text>
+<rect x="300" y="1150" width="300" height="80" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="450" y="1186.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1971c2" text-anchor="middle"><tspan x="450" dy="0">Lead Agent</tspan><tspan x="450" dy="18.75">jayisacoder-lead</tspan></text>
+<rect x="300" y="1330" width="300" height="80" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="450" y="1366.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1971c2" text-anchor="middle"><tspan x="450" dy="0">Research Agent</tspan><tspan x="450" dy="18.75">jayisacoder-research</tspan></text>
+<rect x="750" y="1510" width="300" height="80" rx="8" fill="#ffec99" fill-opacity="1" stroke="#f08c00" stroke-width="2" />
+<text x="900" y="1547" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#f08c00" text-anchor="middle"><tspan x="900" dy="0">Human Approval Gate 1</tspan><tspan x="900" dy="15">(Alpha + Bravo approve)</tspan></text>
+<text x="750" y="1611" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#f08c00" text-anchor="start"><tspan x="750" dy="0">records approval in</tspan><tspan x="750" dy="13.75">evidence/validation.md</tspan></text>
+<rect x="1200" y="1690" width="300" height="80" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="1350" y="1726.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#0ca678" text-anchor="middle"><tspan x="1350" dy="0">Database Agent</tspan><tspan x="1350" dy="18.75">jayisacoder-database</tspan></text>
+<rect x="1200" y="1870" width="300" height="80" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="1350" y="1906.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#0ca678" text-anchor="middle"><tspan x="1350" dy="0">Developer Agent</tspan><tspan x="1350" dy="18.75">jayisacoder-developer</tspan></text>
+<rect x="1200" y="2050" width="300" height="80" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="1350" y="2086.75" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#0ca678" text-anchor="middle"><tspan x="1350" dy="0">Unit Testing Agent</tspan><tspan x="1350" dy="16.25">jayisacoder-unit-testing</tspan></text>
+<rect x="300" y="2230" width="300" height="80" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="450" y="2266.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1971c2" text-anchor="middle"><tspan x="450" dy="0">Independent Test Agent</tspan><tspan x="450" dy="18.75">jayisacoder-test</tspan></text>
+<rect x="750" y="2410" width="300" height="80" rx="8" fill="#ffec99" fill-opacity="1" stroke="#f08c00" stroke-width="2" />
+<text x="900" y="2447" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#f08c00" text-anchor="middle"><tspan x="900" dy="0">Human Approval Gate 2</tspan><tspan x="900" dy="15">(Alpha + Bravo approve)</tspan></text>
+<text x="750" y="2511" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#f08c00" text-anchor="start"><tspan x="750" dy="0">records approval in</tspan><tspan x="750" dy="13.75">evidence/deployment.md</tspan></text>
+<rect x="1200" y="2590" width="300" height="80" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="1350" y="2626.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#0ca678" text-anchor="middle"><tspan x="1350" dy="0">DevOps Agent</tspan><tspan x="1350" dy="18.75">jayisacoder-devops</tspan></text>
+<rect x="750" y="2770" width="300" height="80" rx="8" fill="#ffd8a8" fill-opacity="1" stroke="#e8590c" stroke-width="2" />
+<text x="900" y="2806.25" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#e8590c" text-anchor="middle"><tspan x="900" dy="0">Vercel</tspan><tspan x="900" dy="18.75">(live production deployment)</tspan></text>
+<polyline points="900,880 900,980" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="901.44" y="926" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="901.44" dy="0">requests</tspan></text>
+<polyline points="900,1050 900,1100 450,1100 450,1150" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="676.62" y="1096" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="676.62" dy="0">delegates</tspan></text>
+<polyline points="450,1230 450,1330" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="453.24" y="1276" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="453.24" dy="0">delegates research</tspan></text>
+<polyline points="450,1410 450,1460 900,1460 900,1510" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="678.06" y="1456" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="678.06" dy="0">presents findings</tspan></text>
+<polyline points="900,1590 900,1640 1350,1640 1350,1690" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1126.4399999999998" y="1636" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1126.4399999999998" dy="0">approved</tspan></text>
+<polyline points="1350,1770 1350,1870" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1352.16" y="1816" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1352.16" dy="0">schema ready</tspan></text>
+<polyline points="1350,1950 1350,2050" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1353.6" y="1996" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1353.6" dy="0">implementation ready</tspan></text>
+<polyline points="1350,2130 1350,2180 450,2180 450,2230" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="903.42" y="2176" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="903.42" dy="0">unit tests complete</tspan></text>
+<polyline points="450,2310 450,2360 900,2360 900,2410" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="677.88" y="2356" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="677.88" dy="0">recommends READY</tspan></text>
+<polyline points="900,2490 900,2540 1350,2540 1350,2590" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1126.4399999999998" y="2536" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1126.4399999999998" dy="0">approved</tspan></text>
+<polyline points="1350,2670 1350,2720 900,2720 900,2770" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1126.26" y="2716" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1126.26" dy="0">deploys</tspan></text>
+<rect x="1850" y="1860" width="300" height="100" rx="8" fill="#ffe3e3" fill-opacity="1" stroke="#c92a2a" stroke-width="2" />
+<text x="2000" y="1899.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c92a2a" text-anchor="middle"><tspan x="2000" dy="0">docs/agent-handoffs/*.md</tspan><tspan x="2000" dy="15">shared handoff record — every</tspan><tspan x="2000" dy="15">agent reads/writes here</tspan></text>
+<polyline points="1500,1895 1560,1895 1560,2000 2000,2000 2000,1960" fill="none" stroke="#c92a2a" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="1778.46" y="1995" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#c92a2a" text-anchor="middle"><tspan x="1778.46" dy="0">writes handoff</tspan></text>
+<rect x="1850" y="2030" width="300" height="190" rx="8" fill="#d0bfff" fill-opacity="1" stroke="#6741d9" stroke-width="2" />
+<text x="2000" y="2084.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#6741d9" text-anchor="middle"><tspan x="2000" dy="0">Reusable Skill:</tspan><tspan x="2000" dy="15">jayisacoder-agent-handoff</tspan><tspan x="2000" dy="15"></tspan><tspan x="2000" dy="15">1. do bounded work</tspan><tspan x="2000" dy="15">2. run relevant tests</tspan><tspan x="2000" dy="15">3. write docs/agent-handoffs/*.md</tspan><tspan x="2000" dy="15">4. report to Lead Agent</tspan></text>
+<text x="1850" y="2241" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#6741d9" text-anchor="start"><tspan x="1850" dy="0">(invoked by every agent after finishing its task)</tspan></text>
+<polyline points="1850,2125 1800,2125 1800,1190 600,1190" fill="none" stroke="#6741d9" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<polyline points="1850,2150 1780,2150 1780,2270 600,2270" fill="none" stroke="#6741d9" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<polyline points="1850,2100 1700,2100 1700,1910 1500,1910" fill="none" stroke="#6741d9" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<polyline points="300,2270 200,2270 200,1175 300,1190" fill="none" stroke="#e03131" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="202.7" y="1718.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#e03131" text-anchor="middle"><tspan x="202.7" dy="0">reports failure</tspan></text>
+<polyline points="300,1205 170,1205 170,1820 1160,1820 1160,1910 1200,1910" fill="none" stroke="#e03131" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="668.9599999999999" y="1816" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#e03131" text-anchor="middle"><tspan x="668.9599999999999" dy="0">delegates fix, re-test</tspan></text>
+<rect x="300" y="3000" width="300" height="90" rx="8" fill="#c5f6fa" fill-opacity="1" stroke="#0c8599" stroke-width="2" />
+<text x="450" y="3034.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0c8599" text-anchor="middle"><tspan x="450" dy="0">Alpha's branches</tspan><tspan x="450" dy="15">agent/lead · agent/research</tspan><tspan x="450" dy="15">agent/qa</tspan></text>
+<rect x="1200" y="3000" width="300" height="100" rx="8" fill="#c5f6fa" fill-opacity="1" stroke="#0c8599" stroke-width="2" />
+<text x="1350" y="3039.5" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0c8599" text-anchor="middle"><tspan x="1350" dy="0">Bravo's branches</tspan><tspan x="1350" dy="15">agent/database · agent/developer</tspan><tspan x="1350" dy="15">agent/unit-testing · agent/devops</tspan></text>
+<rect x="750" y="3160" width="300" height="80" rx="8" fill="#c5f6fa" fill-opacity="1" stroke="#0c8599" stroke-width="2" />
+<text x="900" y="3197" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0c8599" text-anchor="middle"><tspan x="900" dy="0">GitHub main</tspan><tspan x="900" dy="15">(Jayisacoder/silver-octo-disco)</tspan></text>
+<polyline points="450,3090 450,3200 750,3200" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="601.8" y="3196" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="601.8" dy="0">merge/push</tspan></text>
+<polyline points="1350,3100 1350,3200 1050,3200" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="1201.8" y="3196" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1e1e1e" text-anchor="middle"><tspan x="1201.8" dy="0">merge/push</tspan></text>
+<polyline points="900,3160 900,2850" fill="none" stroke="#0c8599" stroke-width="2" marker-end="url(#arrowhead)" />
+<text x="904.3199999999999" y="3001" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0c8599" text-anchor="middle"><tspan x="904.3199999999999" dy="0">push triggers deployment</tspan></text>
+<polyline points="1050,2810 2200,2810 2200,600 1100,600 1100,430 510,430" fill="none" stroke="#e8590c" stroke-width="2" stroke-dasharray="8,6" marker-end="url(#arrowhead)" />
+<text x="1653.96" y="596" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#e8590c" text-anchor="middle"><tspan x="1653.96" dy="0">same deployment target</tspan></text>
+<text x="1780" y="124" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#1e1e1e" text-anchor="start"><tspan x="1780" dy="0">Legend:</tspan></text>
+<rect x="1780" y="140" width="24" height="24" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="1814" y="155" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Alpha's agent</tspan></text>
+<rect x="1780" y="174" width="24" height="24" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="1814" y="189" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Bravo's agent</tspan></text>
+<rect x="1780" y="208" width="24" height="24" rx="8" fill="#ffec99" fill-opacity="1" stroke="#f08c00" stroke-width="2" />
+<text x="1814" y="223" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Human approval gate</tspan></text>
+<rect x="1780" y="242" width="24" height="24" rx="8" fill="#b2f2bb" fill-opacity="1" stroke="#2f9e44" stroke-width="2" />
+<text x="1814" y="257" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Application component</tspan></text>
+<rect x="1780" y="276" width="24" height="24" rx="8" fill="#e9ecef" fill-opacity="1" stroke="#495057" stroke-width="2" />
+<text x="1814" y="291" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">User / data store</tspan></text>
+<rect x="1780" y="310" width="24" height="24" rx="8" fill="#ffd8a8" fill-opacity="1" stroke="#e8590c" stroke-width="2" />
+<text x="1814" y="325" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Deployment infra (Vercel)</tspan></text>
+<rect x="1780" y="344" width="24" height="24" rx="8" fill="#d0bfff" fill-opacity="1" stroke="#6741d9" stroke-width="2" />
+<text x="1814" y="359" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Reusable Skill</tspan></text>
+<rect x="1780" y="378" width="24" height="24" rx="8" fill="#ffe3e3" fill-opacity="1" stroke="#c92a2a" stroke-width="2" />
+<text x="1814" y="393" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">Shared handoff docs</tspan></text>
+<rect x="1780" y="412" width="24" height="24" rx="8" fill="#c5f6fa" fill-opacity="1" stroke="#0c8599" stroke-width="2" />
+<text x="1814" y="427" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">GitHub / branches</tspan></text>
+<rect x="1780" y="446" width="24" height="24" rx="8" fill="#fff0f6" fill-opacity="1" stroke="#c2255c" stroke-width="2" />
+<text x="1814" y="461" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#1e1e1e" text-anchor="start"><tspan x="1814" dy="0">User persona</tspan></text>
+<text x="1780" y="508" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#495057" text-anchor="start"><tspan x="1780" dy="0">Dashed red = failure/return path.</tspan><tspan x="1780" dy="15">Dashed purple = Skill invocation.</tspan><tspan x="1780" dy="15">Dashed orange = deployment target.</tspan><tspan x="1780" dy="15">Solid teal = GitHub push trigger.</tspan></text>
+<text x="2400" y="114" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#343a40" text-anchor="start"><tspan x="2400" dy="0">C. Agent &amp; Skill Reference — who's who (for the demo)</tspan></text>
+<rect x="2400" y="140" width="420" height="110" rx="8" fill="#fff0f6" fill-opacity="1" stroke="#c2255c" stroke-width="2" />
+<text x="2408" y="178.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#c2255c" text-anchor="start"><tspan x="2408" dy="0">User Persona: "Alex"</tspan><tspan x="2408" dy="13.75">Individual managing personal tasks alone.</tspan><tspan x="2408" dy="13.75">Needs private data, simple sign-in, and</tspan><tspan x="2408" dy="13.75">trust that only they see their own tasks.</tspan></text>
+<rect x="2860" y="140" width="420" height="110" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="2868" y="171.625" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1971c2" text-anchor="start"><tspan x="2868" dy="0">Lead Agent (main agent, not a</tspan><tspan x="2868" dy="13.75">subagent) — jayisacoder-lead</tspan><tspan x="2868" dy="13.75">Coordinates the whole workflow: delegates</tspan><tspan x="2868" dy="13.75">to the 6 subagents, enforces both human</tspan><tspan x="2868" dy="13.75">approval gates, never writes app code itself.</tspan></text>
+<rect x="2400" y="270" width="420" height="110" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="2408" y="308.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1971c2" text-anchor="start"><tspan x="2408" dy="0">Research Agent (subagent)</tspan><tspan x="2408" dy="13.75">jayisacoder-research — Alpha</tspan><tspan x="2408" dy="13.75">Investigates architecture/security/testing</tspan><tspan x="2408" dy="13.75">approach before implementation. Read-only.</tspan></text>
+<rect x="2860" y="270" width="420" height="110" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="2868" y="308.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0ca678" text-anchor="start"><tspan x="2868" dy="0">Database Agent (subagent)</tspan><tspan x="2868" dy="13.75">jayisacoder-database — Bravo</tspan><tspan x="2868" dy="13.75">Owns the Prisma schema and database</tspan><tspan x="2868" dy="13.75">setup/initialization documentation.</tspan></text>
+<rect x="2400" y="400" width="420" height="110" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="2408" y="438.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0ca678" text-anchor="start"><tspan x="2408" dy="0">Developer Agent (subagent)</tspan><tspan x="2408" dy="13.75">jayisacoder-developer — Bravo</tspan><tspan x="2408" dy="13.75">Implements the approved feature in</tspan><tspan x="2408" dy="13.75">application code, following the plan.</tspan></text>
+<rect x="2860" y="400" width="420" height="110" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="2868" y="438.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0ca678" text-anchor="start"><tspan x="2868" dy="0">Unit Testing Agent (subagent)</tspan><tspan x="2868" dy="13.75">jayisacoder-unit-testing — Bravo</tspan><tspan x="2868" dy="13.75">Writes and runs focused unit tests for</tspan><tspan x="2868" dy="13.75">the implementation's behavior/edge cases.</tspan></text>
+<rect x="2400" y="530" width="420" height="110" rx="8" fill="#a5d8ff" fill-opacity="1" stroke="#1971c2" stroke-width="2" />
+<text x="2408" y="568.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#1971c2" text-anchor="start"><tspan x="2408" dy="0">Independent Test Agent (subagent)</tspan><tspan x="2408" dy="13.75">jayisacoder-test — Alpha</tspan><tspan x="2408" dy="13.75">Independently re-verifies everything —</tspan><tspan x="2408" dy="13.75">never just trusts Unit Testing's results.</tspan></text>
+<rect x="2860" y="530" width="420" height="110" rx="8" fill="#96f2d7" fill-opacity="1" stroke="#0ca678" stroke-width="2" />
+<text x="2868" y="568.5" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0ca678" text-anchor="start"><tspan x="2868" dy="0">DevOps Agent (subagent)</tspan><tspan x="2868" dy="13.75">jayisacoder-devops — Bravo</tspan><tspan x="2868" dy="13.75">Prepares &amp; executes deployment, only</tspan><tspan x="2868" dy="13.75">after Human Approval Gate 2.</tspan></text>
+<rect x="2400" y="660" width="420" height="110" rx="8" fill="#d0bfff" fill-opacity="1" stroke="#6741d9" stroke-width="2" />
+<text x="2408" y="684.75" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#6741d9" text-anchor="start"><tspan x="2408" dy="0">Reusable Skill</tspan><tspan x="2408" dy="13.75">jayisacoder-agent-handoff</tspan><tspan x="2408" dy="13.75">Why a Skill, not a one-off prompt: the</tspan><tspan x="2408" dy="13.75">SAME verify -&gt; handoff -&gt; report procedure,</tspan><tspan x="2408" dy="13.75">invoked by every subagent above, on every</tspan><tspan x="2408" dy="13.75">task — not a single instruction used once.</tspan></text>
+<rect x="2860" y="660" width="420" height="110" rx="8" fill="#f8f9fa" fill-opacity="1" stroke="#495057" stroke-width="2" />
+<text x="2868" y="691.625" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#495057" text-anchor="start"><tspan x="2868" dy="0">Agent vs. Subagent</tspan><tspan x="2868" dy="13.75">Lead = who the human talks to directly.</tspan><tspan x="2868" dy="13.75">The other six = subagents Lead delegates</tspan><tspan x="2868" dy="13.75">bounded work to — never invoked directly</tspan><tspan x="2868" dy="13.75">by a human.</tspan></text>
+</svg>
