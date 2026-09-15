@@ -243,3 +243,72 @@ Lead Agent (for live-deployment verification of the account-chooser behavior).
 ## Required Action From Next Agent
 
 Lead Agent: confirm via a real browser session with live Google OAuth credentials that clicking "Sign in with Google" now always shows Google's account chooser, including right after an app sign-out with the Google session still active in that browser. No re-approval of architecture or schema needed — this is a single OAuth request-parameter addition within the already-approved auth configuration, with `typecheck`/`lint`/`test:unit` (52/52)/`build` all green.
+
+---
+
+# 2026-09-14 Update: UI/UX redesign (visual/presentational only, no behavior change)
+
+## Task
+
+Redesign the existing Task Manager UI to look like a polished, modern SaaS product — clean typography, consistent spacing/radius/shadow, status/priority badges, responsive layout, accessible focus states — while leaving the backend, schema, auth, ownership/security, Route Handlers, and existing validation completely untouched. Explicitly scoped as a visual/UX task, not a feature or architecture task; explicitly instructed not to deploy or bypass gates.
+
+## Input Received
+
+- Direct read of every existing UI file before editing: `src/app/page.tsx`, `src/app/task-board.tsx`, `src/app/auth-buttons.tsx`, `src/app/providers.tsx`, `src/app/theme-toggle.tsx`, `src/app/layout.tsx`, `src/app/globals.css`, `src/lib/types.ts`, and `package.json` (confirmed no CSS framework, icon library, or component library is installed — plain CSS with custom properties, inline `style={{}}` throughout).
+- Instructed boundary: visual/presentational layer only; no changes to `prisma/schema.prisma`, NextAuth config, Route Handlers, ownership/IDOR logic, or existing validation rules; no new dependencies; no new frontend framework.
+
+## Work Completed
+
+1. **`src/app/globals.css` rebuilt into a small design system** — light/dark token sets (surface/border/muted/accent colors, plus dedicated status and priority color pairs for all six enum values, each with a light and dark variant), a spacing/radius/shadow scale, and reusable classes: `.btn` (`primary`/`secondary`/`ghost`/`danger`/`sm`/`icon` variants), `.input`/`.textarea`/`.select`, `.card`, `.stat-card`, `.toolbar`, `.filter-tab`, `.badge-select` (status/priority pill-styled `<select>` elements), `.task-card` (+ `--completed` modifier), `.empty-state`, `.signin-card`, and a `:focus-visible` ring applied uniformly to every interactive element. Responsive rules at 640px/560px collapse the stats grid to 2 columns and stack the header/toolbar. All existing CSS variable names (`--bg`, `--fg`, `--border`, `--muted`, `--error`) were kept and extended rather than renamed, so nothing outside these edited files depends on a variable that moved.
+2. **`src/app/icons.tsx` (new)** — a handful of small inline SVG icon components (search, plus, pencil, trash, x, clipboard). No icon library exists in this project's dependencies, and the brief explicitly says not to add an unnecessary one, so these are plain local JSX, not a new package.
+3. **`src/app/page.tsx`** — redesigned header (title, "Signed in as…", sign-out button) and a new stats row (Total / To do / In progress / Completed) computed directly from the same `initialTasks` array the page already fetches via Prisma — no invented numbers, no new query, no "Overdue" stat (there is no due-date field in the schema, so nothing was fabricated for it). Sign-in screen restyled as a centered card. The actual `getServerSession`/`prisma.task.findMany` logic is byte-for-byte unchanged.
+4. **`src/app/task-board.tsx` redesigned**, with every existing behavior preserved exactly (same `fetch` calls, same request bodies, same state machine for create/edit/delete/filter/sort):
+   - Task list restyled as cards; status and priority are now `<select>` elements styled as colored pill badges (`.badge-select`) — this is still the same functional control (a real `<select>` whose `onChange` calls the same `handleUpdate`), not a separate read-only badge next to a hidden control, so there's no duplicated UI.
+   - Delete confirmation restyled as an inline red-tinted bar; edit mode restyled but still the same inline-editing pattern (no modal introduced, matching "improve the existing pattern, don't rebuild the architecture").
+   - Create form is now opened via a header "+ New task" button (a small added `isFormOpen` state) instead of always being visible — this is the "primary Create Task button" the brief asked for; the form's own fields/validation/submit logic are unchanged.
+   - Two small additive pieces of client-side-only functionality were added because the brief's toolbar section explicitly asks for search and a priority filter, and neither existed before: a text search box (matches against already-fetched `task.title`/`task.description`, no new API call) and a priority filter `<select>`, alongside the pre-existing status filter tabs and sort-by-priority toggle (now presented as a "Sort" `<select>` with the same two states as before). **Flagging this explicitly**: everything else in this pass is pure restyling, but this is a small scope addition — it's UI-layer only (no schema/API/backend change), reversible, and directly requested by the brief's own toolbar spec, but it is additional functionality, not just a reskin, so it's called out here rather than silently bundled in.
+   - Empty states redesigned: "no tasks yet" (with a "+ New task" CTA) and "no tasks match this filter" (with a "clear filters" CTA that resets search/status/priority, not the sort choice).
+5. **`src/app/auth-buttons.tsx` / `src/app/theme-toggle.tsx`** — restyled onto the new `.btn` classes; `signIn('google')`/`signOut()` calls and the theme-toggle's `localStorage`/`data-theme` logic are unchanged, only the `className`/inline-style presentation changed. Theme toggle intentionally left in its existing fixed-position/host location in `layout.tsx` (not moved into the header) so it keeps working identically on both the signed-in and signed-out screens without restructuring the two pages' layouts.
+
+## Files Changed
+
+- `src/app/globals.css` (modified — full design-system rebuild, described above)
+- `src/app/icons.tsx` (new — small inline SVG icons)
+- `src/app/page.tsx` (modified — header/stats/sign-in-screen presentation only; data-fetching logic unchanged)
+- `src/app/task-board.tsx` (modified — presentation + the two additive client-side filters noted above; all existing handlers/requests unchanged)
+- `src/app/auth-buttons.tsx` (modified — class names only)
+- `src/app/theme-toggle.tsx` (modified — class names only; toggle logic unchanged)
+- Not modified: `prisma/schema.prisma`, `src/lib/auth.ts`, `src/lib/validation.ts`, `src/lib/prisma.ts`, `src/lib/types.ts`, any `src/app/api/**` Route Handler, `tests/**`, `package.json` (no new dependency), any other agent's handoff file, deployment configuration. Nothing was deployed.
+
+## Decisions Made
+
+- **Plain CSS extended, not replaced with Tailwind or a component library.** The project has zero CSS/UI dependencies today; introducing one would be a build-tooling/architecture change the brief explicitly rules out ("do not add unnecessary dependencies," "do not introduce a new frontend framework"). A larger hand-written CSS custom-property system was judged the correct way to get consistency without that risk.
+- **Status/priority rendered as styled `<select>`s, not a badge + a separate control.** Keeps the exact same update mechanism (`onChange` → `handleUpdate` → `PATCH`) while satisfying "polished status/priority badges" and avoiding "don't add duplicate functionality."
+- **No due-date UI added anywhere**, despite the brief mentioning due dates — `TaskDTO`/`prisma/schema.prisma` have no such field, and the instructions explicitly forbid inventing fake data or changing the schema. Stats therefore use Total/To do/In progress/Completed instead of the brief's example Total/Active/Completed/Overdue, since "Overdue" is undefined without a due date.
+- **Search + priority filter added as a flagged, small, reversible client-side addition** (see Work Completed #4) rather than either (a) silently expanding scope or (b) omitting a toolbar control the brief explicitly asked for. No backend change was needed or made.
+- **No modal introduced for create/edit** — the existing pattern (inline form / inline edit) was improved in place, per the explicit instruction to improve the existing pattern rather than rebuild the architecture.
+- **Did not move the theme toggle into the header** — lower risk than restructuring both the signed-in and signed-out layouts to accommodate it in a new location; it already appears on both screens today.
+
+## Tests/Verification
+
+- `npm run test:unit` — `# tests 52 / # pass 52 / # fail 0`, unmodified test files, all still passing (nothing in this pass touches Route Handler/validation/schema logic).
+- `npm test` — same, `52/52`.
+- `npm run build` (`next build`) — `✓ Compiled successfully`, typecheck clean, `✓ Generating static pages (5/5)`, route table unchanged (`/`, `/api/auth/[...nextauth]`, `/api/tasks`, `/api/tasks/[id]` — same dynamic/static split as before).
+- `npm run test:all` (architecture + commit-gate + unit + full suite) — all green.
+- **Manual visual verification**: this environment has no local `DATABASE_URL`/Google OAuth credentials (`.env.local` here only contains a Vercel OIDC token from an earlier `vercel link`, no `.env` exists), so a real authenticated `npm run dev` session couldn't be driven end-to-end locally without touching auth/infra configuration, which was out of scope. Instead: (a) the unauthenticated sign-in screen was verified for real against the actual local dev server (`next dev`, both light and dark mode, via browser automation); (b) the authenticated dashboard/task-list/toolbar/badges/empty-states/delete-confirmation were verified visually via a throwaway static HTML file (built in the session scratchpad, outside the repo, using a copy of the real `globals.css` and the exact class names/markup structure `task-board.tsx`/`page.tsx` produce, populated with clearly-fictional placeholder task text for layout-inspection purposes only) — this file was deleted after review and was never part of the app or committed. This is a real gap relative to a full end-to-end check and is called out below.
+- Responsive behavior was verified by reading the CSS rules, not by an automated narrow-viewport screenshot — the available browser-automation window-resize tool did not change the captured viewport size in this environment. The breakpoints use standard, conventional patterns (flex-wrap, grid column collapse, flex-direction switch at 640px/560px).
+
+## Problems or Risks
+
+- **No real authenticated end-to-end visual check was performed against the live app** in this environment, for the reason above (no local OAuth/DB credentials, and provisioning them was out of scope for a UI task). The static-preview check gives high confidence the markup/CSS is correct (same class names, same CSS file), but it is not the same as clicking through the actual React component tree with real state transitions. Recommend either: the Lead/Test Agent runs `npm run dev` with real local credentials and clicks through create/edit/delete/search/filter/sort once, or this is verified on the next real deployment before Gate 2 sign-off for this change.
+- **Mobile/tablet breakpoints were not confirmed with an actual narrow-viewport screenshot** in this pass, only by CSS review, due to a tooling limitation in this environment (see above). Recommend a quick manual phone-width check before presenting this as final.
+- **Search and priority filter are new, small, client-side-only functionality**, not pure restyling — flagged above and here again since it's the one place this pass went slightly beyond "make it look better." No backend, schema, or security surface was touched by either addition.
+- **Nothing was committed, pushed, or deployed as part of this handoff** — per the explicit instruction not to deploy and not to bypass gates. The working tree currently has these changes unstaged.
+
+## Next Agent
+
+Lead Agent.
+
+## Required Action From Next Agent
+
+Review the redesign (ideally via `npm run dev` with real local credentials, or the next deployment) before this is committed/pushed/deployed. No schema, auth, or Route Handler re-approval is needed — nothing in that surface changed — but the two small additive UI-only features (search, priority filter) are called out above in case the Lead Agent wants to explicitly note them in `evidence/validation.md` rather than have them pass silently as "just a reskin." No deployment was performed by this agent.

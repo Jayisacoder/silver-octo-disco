@@ -12,10 +12,14 @@ export default async function HomePage() {
 
   if (!session?.user?.id) {
     return (
-      <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 720, margin: '0 auto' }}>
-        <h1>Task Manager</h1>
-        <p>Sign in with Google to view and manage your tasks.</p>
-        <SignInButton />
+      <main className="page">
+        <div className="signin-screen">
+          <div className="card signin-card">
+            <h1>Task Manager</h1>
+            <p>Sign in with Google to view and manage your tasks.</p>
+            <SignInButton />
+          </div>
+        </div>
       </main>
     );
   }
@@ -37,13 +41,44 @@ export default async function HomePage() {
     updatedAt: task.updatedAt.toISOString(),
   }));
 
+  const stats = {
+    total: initialTasks.length,
+    todo: initialTasks.filter((t) => t.status === 'TODO').length,
+    inProgress: initialTasks.filter((t) => t.status === 'IN_PROGRESS').length,
+    completed: initialTasks.filter((t) => t.status === 'COMPLETED').length,
+  };
+
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif', maxWidth: 720, margin: '0 auto' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Task Manager</h1>
-        <SignOutButton />
+    <main className="page">
+      <header className="page-header">
+        <div className="page-header__text">
+          <h1>Task Manager</h1>
+          <p>Signed in as {session.user.email ?? session.user.name ?? 'you'}</p>
+        </div>
+        <div className="page-header__actions">
+          <SignOutButton />
+        </div>
       </header>
-      <p>Signed in as {session.user.email ?? session.user.name ?? 'you'}</p>
+
+      <section className="stats" aria-label="Task summary">
+        <div className="stat-card">
+          <div className="stat-card__value">{stats.total}</div>
+          <div className="stat-card__label">Total</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card__value">{stats.todo}</div>
+          <div className="stat-card__label">To do</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card__value">{stats.inProgress}</div>
+          <div className="stat-card__label">In progress</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card__value">{stats.completed}</div>
+          <div className="stat-card__label">Completed</div>
+        </div>
+      </section>
+
       <TaskBoard initialTasks={initialTasks} />
     </main>
   );

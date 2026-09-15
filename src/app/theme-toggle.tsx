@@ -46,18 +46,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      style={{
-        position: 'fixed',
-        top: '0.75rem',
-        right: '0.75rem',
-        zIndex: 1000,
-        border: '1px solid var(--border)',
-        borderRadius: 6,
-        background: 'var(--bg)',
-        color: 'var(--fg)',
-        padding: '0.35rem 0.6rem',
-        cursor: 'pointer',
-      }}
+      className="btn btn-secondary btn-sm theme-toggle"
       aria-label="Toggle dark mode"
     >
       {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
